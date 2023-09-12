@@ -40,13 +40,8 @@ public class Controller {
         return jokeRepository.findById(id);
     }
 
-    @GetMapping("delete/{id}")
-    public String removeJoke(@PathVariable("id") long id) {
-        Optional<Joke> joke = getJokeById(id);
-        if (joke.isPresent()) {
-            jokeRepository.deleteById(id);
-            return String.format("Deleted joke with id %d", id);
-        }
-        return String.format("Joke with id %s does not exit", id);
+    @GetMapping("/delete/{id}")
+    public void removeJokeById(@PathVariable("id") long id) {
+        jokeRepository.deleteById(id);
     }
 }
