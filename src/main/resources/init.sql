@@ -1,6 +1,6 @@
 -- drop tables
-DROP TABLE IF EXISTS jokes;
-DROP TABLE IF EXISTS ratings;
+DROP TABLE IF EXISTS jokes CASCADE;
+DROP TABLE IF EXISTS ratings CASCADE;
 
 -- create tables
 CREATE TABLE jokes (
