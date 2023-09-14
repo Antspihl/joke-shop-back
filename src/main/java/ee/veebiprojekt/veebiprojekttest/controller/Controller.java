@@ -52,7 +52,7 @@ public class Controller {
             return "Rating must be between 1 and 5";
         }
         Rating newRating = new Rating();
-        newRating.setRating(rating);
+        newRating.setRatingValue(rating);
         newRating.setProductId(productId);
         ratingRepository.save(newRating);
         return String.format("%s %s", rating, productId);
@@ -65,9 +65,12 @@ public class Controller {
         int count = 0;
         for (Rating rating : ratings) {
             if (Objects.equals(rating.getProductId(), productId)) {
-                sum += rating.getRating();
+                sum += rating.getRatingValue();
                 count++;
             }
+        }
+        if (count == 0) {
+            return 0;
         }
         double rating = sum / count;
         rating = Math.round(rating * 10) / 10.0;

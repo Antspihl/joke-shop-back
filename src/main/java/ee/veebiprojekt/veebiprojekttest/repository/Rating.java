@@ -10,6 +10,8 @@ public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(name="product_id")
     private Long productId;
-    private int rating;
+    @Column(name="rating_value")
+    private int ratingValue;
 }
