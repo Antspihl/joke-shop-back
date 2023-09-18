@@ -9,7 +9,7 @@ CREATE TABLE jokes (
                     punchline VARCHAR(255) NOT NULL
 );
 CREATE TABLE ratings (
-                      rating_id SERIAL PRIMARY KEY,
+                      id SERIAL PRIMARY KEY,
                       product_id INT NOT NULL REFERENCES jokes(id),
                       rating_value INT NOT NULL CHECK (rating_value >= 0 AND rating_value <= 5)
 );

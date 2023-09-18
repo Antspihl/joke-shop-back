@@ -3,15 +3,15 @@ package ee.veebiprojekt.veebiprojekttest.repository;
 import jakarta.persistence.*;
 import lombok.Data;
 
-@Table(name = "jokes")
+@Table(name = "ratings")
 @Entity
 @Data
-public class Joke {
+public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name="setup")
-    private String setup;
-    @Column(name="punchline")
-    private String punchline;
+    @Column(name="product_id")
+    private Long productId;
+    @Column(name="rating_value")
+    private int ratingValue;
 }
