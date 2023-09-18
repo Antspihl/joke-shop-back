@@ -6,6 +6,7 @@ import ee.veebiprojekt.veebiprojekttest.repository.Joke;
 import ee.veebiprojekt.veebiprojekttest.repository.JokeRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -32,5 +33,15 @@ public class Controller {
     @GetMapping("/get")
     public List<Joke> getAllJokes() {
         return jokeRepository.findAll();
+    }
+
+    @GetMapping("/get/{id}")
+    public Optional<Joke> getJokeById(@PathVariable("id") long id) {
+        return jokeRepository.findById(id);
+    }
+
+    @GetMapping("/delete/{id}")
+    public void removeJokeById(@PathVariable("id") long id) {
+        jokeRepository.deleteById(id);
     }
 }
