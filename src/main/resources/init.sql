@@ -28,7 +28,7 @@ CREATE TABLE users
     is_admin      BOOLEAN DEFAULT false
 );
 
-CREATE TABLE shop_cart
+CREATE TABLE shop_carts
 (
     cart_id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
@@ -64,7 +64,7 @@ VALUES ('admin', 'admin@gmail.com', '$2a$abcdefgh', 'Admin', true);
 INSERT INTO users (username, email, password_hash, full_name, is_admin)
 VALUES ('user', 'ilmar@gmail.com', '$2a$123456', 'Ilmar', false);
 
-INSERT INTO shop_cart (user_id)
+INSERT INTO shop_carts (user_id)
 VALUES (2);
 
 INSERT INTO cart_items (cart_id, joke_id)
