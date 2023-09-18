@@ -76,6 +76,8 @@ public class Controller {
         double rating = sum / count;
         rating = Math.round(rating * 10) / 10.0;
         return rating;
+    }
+
     @GetMapping("/get/{id}")
     public Optional<Joke> getJokeById(@PathVariable("id") long id) {
         return jokeRepository.findById(id);

@@ -9,8 +9,9 @@ import lombok.Data;
 public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="rating_id")
     private long id;
-    @Column(name="product_id")
+    @Column(name="joke_id")
     private Long productId;
     @Column(name="rating_value")
     private int ratingValue;
