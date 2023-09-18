@@ -9,6 +9,7 @@ import lombok.Data;
 public class Joke {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="joke_id")
     private long id;
     @Column(name="setup")
     private String setup;

@@ -8,19 +8,19 @@ DROP TABLE IF EXISTS cart_items CASCADE;
 -- create tables
 CREATE TABLE jokes
 (
-    id        SERIAL PRIMARY KEY,
+    joke_id        SERIAL PRIMARY KEY,
     setup     VARCHAR(255) NOT NULL,
     punchline VARCHAR(255) NOT NULL
 );
 CREATE TABLE ratings
 (
     rating_id    SERIAL PRIMARY KEY,
-    product_id   INT NOT NULL REFERENCES jokes (id),
+    joke_id   INT NOT NULL REFERENCES jokes (joke_id),
     rating_value INT NOT NULL CHECK (rating_value >= 0 AND rating_value <= 5)
 );
 CREATE TABLE users
 (
-    id            SERIAL PRIMARY KEY,
+    user_id            SERIAL PRIMARY KEY,
     username      VARCHAR(50)  NOT NULL UNIQUE,
     email         VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE shop_carts
 (
     cart_id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users (id)
+    FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
 
 CREATE TABLE cart_items
@@ -40,8 +40,8 @@ CREATE TABLE cart_items
     item_id SERIAL PRIMARY KEY,
     cart_id INT NOT NULL,
     joke_id INT NOT NULL,
-    FOREIGN KEY (cart_id) REFERENCES shop_cart (cart_id),
-    FOREIGN KEY (joke_id) REFERENCES jokes (id)
+    FOREIGN KEY (cart_id) REFERENCES shop_carts (cart_id),
+    FOREIGN KEY (joke_id) REFERENCES jokes (joke_id)
 );
 
 -- add test data to the tables
@@ -52,11 +52,11 @@ VALUES ('What do you call a fish with no eyes?', 'A fsh');
 INSERT INTO jokes (setup, punchline)
 VALUES ('What do you call a deer with no eyes?', 'No eye deer(No idea)');
 
-INSERT INTO ratings (product_id, rating_value)
+INSERT INTO ratings (joke_id, rating_value)
 VALUES (1, 4);
-INSERT INTO ratings (product_id, rating_value)
+INSERT INTO ratings (joke_id, rating_value)
 VALUES (2, 3);
-INSERT INTO ratings (product_id, rating_value)
+INSERT INTO ratings (joke_id, rating_value)
 VALUES (3, 5);
 
 INSERT INTO users (username, email, password_hash, full_name, is_admin)
