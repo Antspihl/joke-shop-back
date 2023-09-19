@@ -4,6 +4,7 @@ import ee.veebiprojekt.veebiprojekttest.dto.JokeDTO;
 import ee.veebiprojekt.veebiprojekttest.entity.Joke;
 import ee.veebiprojekt.veebiprojekttest.mapper.JokeMapper;
 import ee.veebiprojekt.veebiprojekttest.repository.JokeRepository;
+import ee.veebiprojekt.veebiprojekttest.exception.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,15 +28,16 @@ public class JokeService {
     }
 
     public JokeDTO getJoke(long id) {
-        Joke joke = jokeRepository.findById(id).orElseThrow(RuntimeException::new);
+        Joke joke = jokeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
         return jokeMapper.toDTO(joke);
     }
 
     public List<Joke> getJokes() {
         return jokeRepository.findAll();
     }
+
     public JokeDTO editJoke(long id, JokeDTO newJoke) {
-        Joke joke = jokeRepository.findById(id).orElseThrow(RuntimeException::new);
+        Joke joke = jokeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
         joke.setSetup(newJoke.setup());
         joke.setPunchline(newJoke.punchline());
         jokeRepository.save(joke);
