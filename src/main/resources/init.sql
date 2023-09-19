@@ -15,7 +15,7 @@ CREATE TABLE jokes
 CREATE TABLE ratings
 (
     rating_id    SERIAL PRIMARY KEY,
-    joke_id   INT NOT NULL REFERENCES jokes (joke_id),
+    joke_id   INT NOT NULL REFERENCES jokes (joke_id) ON DELETE CASCADE,
     rating_value INT NOT NULL CHECK (rating_value >= 0 AND rating_value <= 5)
 );
 CREATE TABLE users

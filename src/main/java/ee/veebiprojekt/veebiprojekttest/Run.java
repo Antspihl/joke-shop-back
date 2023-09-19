@@ -13,9 +13,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 //        //ManagementWebSecurityAutoConfiguration.class
 //})
 @SpringBootApplication
-public class VeebiprojektTestApplication {
+public class Run {
     public static void main(String[] args) {
-        SpringApplication.run(VeebiprojektTestApplication.class, args);
+        SpringApplication.run(Run.class, args);
     }
 }
 
