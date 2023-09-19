@@ -19,14 +19,23 @@ public class JokeController {
         return jokeService.addJoke(jokeDTO);
     }
 
-    @GetMapping("/{id}")
-    public JokeDTO getJoke(@PathVariable long id) {
+    @GetMapping("/get/{id}")
+    public JokeDTO getJoke(@PathVariable("id") long id) {
         return jokeService.getJoke(id);
     }
 
-    @GetMapping()
+    @GetMapping("/all")
     public List<Joke> getJokes() {
         return jokeService.getJokes();
+    }
+    @PutMapping("/edit/{id}")
+    public JokeDTO editJoke(@PathVariable("id") long id, @RequestBody JokeDTO newJoke) {
+        return jokeService.editJoke(id, newJoke);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void removeJoke(@PathVariable("id") long id) {
+        jokeService.deleteJoke(id);
     }
 
 }

@@ -34,5 +34,16 @@ public class JokeService {
     public List<Joke> getJokes() {
         return jokeRepository.findAll();
     }
+    public JokeDTO editJoke(long id, JokeDTO newJoke) {
+        Joke joke = jokeRepository.findById(id).orElseThrow(RuntimeException::new);
+        joke.setSetup(newJoke.setup());
+        joke.setPunchline(newJoke.punchline());
+        jokeRepository.save(joke);
+        return jokeMapper.toDTO(joke);
+    }
+
+    public void deleteJoke(long id) {
+        jokeRepository.deleteById(id);
+    }
 
 }
