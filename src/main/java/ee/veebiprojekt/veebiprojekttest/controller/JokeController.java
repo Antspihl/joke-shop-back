@@ -14,7 +14,7 @@ import java.util.List;
 public class JokeController {
     private final JokeService jokeService;
 
-    @PostMapping
+    @PostMapping("/add")
     public JokeDTO addJoke(@RequestBody JokeDTO jokeDTO) {
         return jokeService.addJoke(jokeDTO);
     }
