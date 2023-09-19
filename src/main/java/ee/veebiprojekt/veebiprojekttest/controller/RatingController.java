@@ -18,4 +18,14 @@ public class RatingController {
     public RatingDTO addRating(@RequestBody RatingDTO ratingDTO) {
         return ratingService.addRating(ratingDTO);
     }
+
+    @GetMapping("/{jokeId}")
+    public double getJokeRating(@PathVariable Long jokeId) {
+        return ratingService.getJokeRating(jokeId);
+    }
+
+    @GetMapping
+    public List<Rating> getRatings() {
+        return ratingService.getRatings();
+    }
 }
