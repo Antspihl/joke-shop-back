@@ -1,14 +1,10 @@
 package ee.veebiprojekt.veebiprojekttest.service;
 
 import ee.veebiprojekt.veebiprojekttest.dto.JokeDTO;
-import ee.veebiprojekt.veebiprojekttest.dto.RatingDTO;
 import ee.veebiprojekt.veebiprojekttest.entity.Joke;
-import ee.veebiprojekt.veebiprojekttest.entity.Rating;
 import ee.veebiprojekt.veebiprojekttest.mapper.JokeMapper;
 import ee.veebiprojekt.veebiprojekttest.repository.JokeRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class JokeService {
@@ -26,5 +22,17 @@ public class JokeService {
         joke.setPunchline(jokeDTO.punchline());
         jokeRepository.save(joke);
         return jokeMapper.toDTO(joke);
+    }
+
+    public JokeDTO editJoke(long id, JokeDTO newJoke) {
+        Joke joke = jokeRepository.findById(id).orElseThrow(RuntimeException::new);
+        joke.setSetup(newJoke.setup());
+        joke.setPunchline(newJoke.punchline());
+        jokeRepository.save(joke);
+        return jokeMapper.toDTO(joke);
+    }
+
+    public void deleteJoke(long id) {
+        jokeRepository.deleteById(id);
     }
 }
