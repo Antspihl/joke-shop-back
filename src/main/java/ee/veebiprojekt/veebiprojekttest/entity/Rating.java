@@ -1,4 +1,4 @@
-package ee.veebiprojekt.veebiprojekttest.repository;
+package ee.veebiprojekt.veebiprojekttest.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -12,7 +12,7 @@ public class Rating {
     @Column(name="rating_id")
     private long id;
     @Column(name="joke_id")
-    private Long productId;
+    private long jokeId;
     @Column(name="rating_value")
     private int ratingValue;
 }

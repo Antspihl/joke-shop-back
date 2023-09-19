@@ -1,4 +1,4 @@
-package ee.veebiprojekt.veebiprojekttest.repository;
+package ee.veebiprojekt.veebiprojekttest.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
