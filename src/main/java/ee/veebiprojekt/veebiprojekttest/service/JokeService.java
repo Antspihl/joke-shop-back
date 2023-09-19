@@ -1,9 +1,7 @@
 package ee.veebiprojekt.veebiprojekttest.service;
 
 import ee.veebiprojekt.veebiprojekttest.dto.JokeDTO;
-import ee.veebiprojekt.veebiprojekttest.dto.RatingDTO;
 import ee.veebiprojekt.veebiprojekttest.entity.Joke;
-import ee.veebiprojekt.veebiprojekttest.entity.Rating;
 import ee.veebiprojekt.veebiprojekttest.mapper.JokeMapper;
 import ee.veebiprojekt.veebiprojekttest.repository.JokeRepository;
 import org.springframework.stereotype.Service;
@@ -27,4 +25,14 @@ public class JokeService {
         jokeRepository.save(joke);
         return jokeMapper.toDTO(joke);
     }
+
+    public JokeDTO getJoke(long id) {
+        Joke joke = jokeRepository.findById(id).orElseThrow(RuntimeException::new);
+        return jokeMapper.toDTO(joke);
+    }
+
+    public List<Joke> getJokes() {
+        return jokeRepository.findAll();
+    }
+
 }
