@@ -32,4 +32,16 @@ public class RatingService {
         ratingRepository.save(rating);
         return ratingDTO;
     }
+
+    public double getJokeRating(Long jokeId) {
+        List<Rating> ratings = ratingRepository.findAllByJokeId(jokeId);
+        return ratings.stream()
+                .mapToInt(Rating::getRatingValue)
+                .average()
+                .orElse(0.0);
+    }
+
+    public List<Rating> getRatings() {
+        return ratingRepository.findAll();
+    }
 }

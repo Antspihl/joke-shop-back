@@ -4,6 +4,9 @@ import ee.veebiprojekt.veebiprojekttest.dto.JokeDTO;
 import ee.veebiprojekt.veebiprojekttest.service.JokeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ee.veebiprojekt.veebiprojekttest.entity.Joke;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/jokes")
@@ -16,13 +19,14 @@ public class JokeController {
         return jokeService.addJoke(jokeDTO);
     }
 
-    @PutMapping("/edit/{id}")
-    public JokeDTO editJoke(@PathVariable("id") long id, @RequestBody JokeDTO newJoke) {
-        return jokeService.editJoke(id, newJoke);
+    @GetMapping("/{id}")
+    public JokeDTO getJoke(@PathVariable long id) {
+        return jokeService.getJoke(id);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public void removeJoke(@PathVariable("id") long id) {
-        jokeService.deleteJoke(id);
+    @GetMapping()
+    public List<Joke> getJokes() {
+        return jokeService.getJokes();
     }
+
 }
