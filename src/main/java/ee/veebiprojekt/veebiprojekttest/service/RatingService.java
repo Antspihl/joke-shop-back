@@ -2,6 +2,8 @@ package ee.veebiprojekt.veebiprojekttest.service;
 
 import ee.veebiprojekt.veebiprojekttest.dto.RatingDTO;
 import ee.veebiprojekt.veebiprojekttest.entity.Rating;
+import ee.veebiprojekt.veebiprojekttest.exception.EntityNotFoundException;
+import ee.veebiprojekt.veebiprojekttest.exception.InvalidValueException;
 import ee.veebiprojekt.veebiprojekttest.mapper.RatingMapper;
 import ee.veebiprojekt.veebiprojekttest.repository.RatingRepository;
 import org.springframework.stereotype.Service;
@@ -19,13 +21,12 @@ public class RatingService {
     }
 
     public RatingDTO addRating(RatingDTO ratingDTO) {
-        // todo throw exceptions if jokeId or ratingValue are invalid
-        /* if (jokeRepository.findById(ratingDTO.jokeId()).isEmpty()) {
-            return "No such product";
+        if (ratingRepository.findById(ratingDTO.jokeId()).isEmpty()) {
+            throw new EntityNotFoundException(ratingDTO.jokeId());
         }
         if (ratingDTO.ratingValue() < 1 || ratingDTO.ratingValue() > 5) {
-            return "Rating must be between 1 and 5";
-        }*/
+            throw new InvalidValueException(ratingDTO.ratingValue());
+        }
         Rating rating = new Rating();
         rating.setRatingValue(ratingDTO.ratingValue());
         rating.setJokeId(ratingDTO.jokeId());
