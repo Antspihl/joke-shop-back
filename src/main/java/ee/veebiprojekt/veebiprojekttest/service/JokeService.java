@@ -23,6 +23,8 @@ public class JokeService {
         Joke joke = new Joke();
         joke.setSetup(jokeDTO.setup());
         joke.setPunchline(jokeDTO.punchline());
+        if (jokeDTO.price() != null) joke.setPrice(jokeDTO.price());
+        if (jokeDTO.timesBought() != null) joke.setTimesBought(jokeDTO.timesBought());
         jokeRepository.save(joke);
         return jokeMapper.toDTO(joke);
     }
@@ -38,8 +40,10 @@ public class JokeService {
 
     public JokeDTO editJoke(long id, JokeDTO newJoke) {
         Joke joke = jokeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
-        joke.setSetup(newJoke.setup());
-        joke.setPunchline(newJoke.punchline());
+        if (newJoke.setup() != null) joke.setSetup(newJoke.setup());
+        if (newJoke.punchline() != null) joke.setPunchline(newJoke.punchline());
+        if (newJoke.price() != null) joke.setPrice(newJoke.price());
+        if (newJoke.timesBought() != null) joke.setTimesBought(newJoke.timesBought());
         jokeRepository.save(joke);
         return jokeMapper.toDTO(joke);
     }
