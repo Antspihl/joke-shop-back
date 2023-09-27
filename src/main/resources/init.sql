@@ -2,7 +2,7 @@
 DROP TABLE IF EXISTS jokes CASCADE;
 DROP TABLE IF EXISTS ratings CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS shop_cart CASCADE;
+DROP TABLE IF EXISTS shop_carts CASCADE;
 DROP TABLE IF EXISTS cart_items CASCADE;
 
 -- create tables
@@ -71,4 +71,6 @@ VALUES (2);
 
 INSERT INTO cart_items (cart_id, joke_id)
 VALUES (1, 1);
+INSERT INTO cart_items (cart_id, joke_id)
+VALUES (1, 2);
 
