@@ -15,4 +15,6 @@ public class Rating {
     private long jokeId;
     @Column(name="rating_value")
     private int ratingValue;
+    @Column(name="author_id")
+    private long authorId;
 }

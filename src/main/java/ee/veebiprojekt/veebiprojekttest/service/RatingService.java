@@ -20,7 +20,7 @@ public class RatingService {
         this.ratingMapper = ratingMapper;
     }
 
-    public RatingDTO addRating(RatingDTO ratingDTO) {
+    private Rating authRatingDto(RatingDTO ratingDTO) {
         if (ratingRepository.findById(ratingDTO.jokeId()).isEmpty()) {
             throw new EntityNotFoundException(ratingDTO.jokeId());
         }
@@ -30,6 +30,12 @@ public class RatingService {
         Rating rating = new Rating();
         rating.setRatingValue(ratingDTO.ratingValue());
         rating.setJokeId(ratingDTO.jokeId());
+        rating.setAuthorId(ratingDTO.authorId());
+        return rating;
+    }
+
+    public RatingDTO addRating(RatingDTO ratingDTO) {
+        Rating rating = authRatingDto(ratingDTO);
         ratingRepository.save(rating);
         return ratingDTO;
     }
@@ -44,5 +50,19 @@ public class RatingService {
 
     public List<Rating> getRatings() {
         return ratingRepository.findAll();
+    }
+
+    public RatingDTO editRating(RatingDTO ratingDTO, long id) {
+        Rating rating = ratingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
+        if (ratingDTO.ratingValue() != null) rating.setRatingValue(ratingDTO.ratingValue());
+        if (ratingDTO.jokeId() != null) rating.setJokeId(ratingDTO.jokeId());
+        ratingRepository.save(rating);
+        return ratingMapper.toDTO(rating);
+    }
+
+    public RatingDTO deleteRating(Long id) {
+        Rating rating = ratingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
+        ratingRepository.deleteById(id);
+        return ratingMapper.toDTO(rating);
     }
 }

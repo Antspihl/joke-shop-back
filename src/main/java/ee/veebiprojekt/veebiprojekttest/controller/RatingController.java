@@ -28,4 +28,14 @@ public class RatingController {
     public List<Rating> getRatings() {
         return ratingService.getRatings();
     }
+
+    @PostMapping("/{id}")
+    public RatingDTO editRating(@RequestBody RatingDTO ratingDTO, @PathVariable Long id) {
+        return ratingService.editRating(ratingDTO, id);
+    }
+
+    @DeleteMapping("/{id}")
+    public RatingDTO deleteRating(@PathVariable Long id) {
+        return ratingService.deleteRating(id);
+    }
 }

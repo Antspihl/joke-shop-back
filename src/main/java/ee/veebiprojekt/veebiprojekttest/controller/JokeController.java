@@ -28,12 +28,13 @@ public class JokeController {
     public List<Joke> getJokes() {
         return jokeService.getJokes();
     }
-    @PutMapping("/edit/{id}")
+
+    @PutMapping("/{id}")
     public JokeDTO editJoke(@PathVariable("id") long id, @RequestBody JokeDTO newJoke) {
         return jokeService.editJoke(id, newJoke);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public void removeJoke(@PathVariable("id") long id) {
         jokeService.deleteJoke(id);
     }
