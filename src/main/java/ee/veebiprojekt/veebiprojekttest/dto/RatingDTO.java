@@ -1,4 +1,4 @@
 package ee.veebiprojekt.veebiprojekttest.dto;
 
-public record RatingDTO(long jokeId, int ratingValue) {
+public record RatingDTO(Long jokeId, Integer ratingValue, Long authorId) {
 }
