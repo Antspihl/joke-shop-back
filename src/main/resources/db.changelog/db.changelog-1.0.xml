@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+
+    <!-- Create the 'jokes' table -->
+    <changeSet id="create_joke_table" author="mattias">
+        <createTable tableName="jokes">
+            <column name="joke_id" type="SERIAL">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="setup" type="VARCHAR(255)" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="punchline" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="NUMERIC(8,2)" defaultValueNumeric="1"/>
+            <column name="times_bought" type="INT" defaultValueNumeric="0"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Create the 'users' table -->
+    <changeSet id="create_users_table" author="mattias">
+        <createTable tableName="users">
+            <column name="user_id" type="SERIAL">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="username" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password_hash" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="full_name" type="VARCHAR(100)">
+            </column>
+            <column name="is_admin" type="BOOLEAN" defaultValueBoolean="false">
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Create the 'ratings' table -->
+    <changeSet id="create_ratings_table" author="mattias">
+        <createTable tableName="ratings">
+            <column name="rating_id" type="SERIAL">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="joke_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rating_value" type="INT">
+                <constraints nullable="false" checkConstraint="rating_value &gt;= 0 AND rating_value &lt;= 5"/>
+            </column>
+            <column name="author_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="ratings" baseColumnNames="joke_id" constraintName="fk_joke_id"
+                                 referencedTableName="jokes" referencedColumnNames="joke_id"
+                                 onDelete="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="ratings" baseColumnNames="author_id" constraintName="fk_author_id"
+                                 referencedTableName="users" referencedColumnNames="user_id"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+
+    <!-- Create the 'shop_carts' table -->
+    <changeSet id="create_shop_carts_table" author="mattias">
+        <createTable tableName="shop_carts">
+            <column name="cart_id" type="SERIAL">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="shop_carts" baseColumnNames="user_id" constraintName="fk_user_id"
+                                 referencedTableName="users" referencedColumnNames="user_id"
+                                    onDelete="CASCADE"/>
+    </changeSet>
+
+    <!-- Create the 'cart_items' table -->
+    <changeSet id="create_cart_items_table" author="mattias">
+        <createTable tableName="cart_items">
+            <column name="item_id" type="SERIAL">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="cart_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="joke_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="cart_items" baseColumnNames="cart_id" constraintName="fk_cart_id"
+                                 referencedTableName="shop_carts" referencedColumnNames="cart_id"
+                                    onDelete="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="cart_items" baseColumnNames="joke_id" constraintName="fk_joke_id"
+                                 referencedTableName="jokes" referencedColumnNames="joke_id"
+                                    onDelete="CASCADE"/>
+    </changeSet>
+
+    <!-- Insert data into 'jokes' table -->
+    <changeSet id="insert-jokes-data" author="mattias">
+        <sql>
+            INSERT INTO jokes (setup, punchline, price)
+            VALUES ('Why did the chicken cross the road?', 'To get to the other side', 10.00);
+            INSERT INTO jokes (setup, punchline, price)
+            VALUES ('What do you call a fish with no eyes?', 'A fsh', 15.00);
+            INSERT INTO jokes (setup, punchline)
+            VALUES ('What do you call a deer with no eyes?', 'No eye deer(No idea)');
+        </sql>
+    </changeSet>
+
+    <!-- Insert data into 'users' table -->
+    <changeSet id="insert-users-data" author="mattias">
+        <sql>
+            INSERT INTO users (username, email, password_hash, full_name, is_admin)
+            VALUES ('admin', 'admin@gmail.com', '$2a$abcdefgh', 'Admin', true);
+            INSERT INTO users (username, email, password_hash, full_name, is_admin)
+            VALUES ('user', 'ilmar@gmail.com', '$2a$123456', 'Ilmar', false);
+        </sql>
+    </changeSet>
+
+    <!-- Insert data into 'ratings' table -->
+    <changeSet id="insert-ratings-data" author="mattias">
+        <sql>
+            INSERT INTO ratings (joke_id, rating_value, author_id)
+            VALUES (1, 4, 2);
+            INSERT INTO ratings (joke_id, rating_value, author_id)
+            VALUES (2, 3, 2);
+            INSERT INTO ratings (joke_id, rating_value, author_id)
+            VALUES (3, 5, 2);
+        </sql>
+    </changeSet>
+
+    <!-- Insert data into 'shop_carts' table -->
+    <changeSet id="insert-shop-carts-data" author="mattias">
+        <sql>
+            INSERT INTO shop_carts (user_id)
+            VALUES (2);
+        </sql>
+    </changeSet>
+
+    <!-- Insert data into 'cart_items' table -->
+    <changeSet id="insert-cart-items-data" author="mattias">
+        <sql>
+            INSERT INTO cart_items (cart_id, joke_id)
+            VALUES (1, 1);
+            INSERT INTO cart_items (cart_id, joke_id)
+            VALUES (1, 2);
+        </sql>
+    </changeSet>
+</databaseChangeLog>
