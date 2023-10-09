@@ -39,4 +39,13 @@ public class JokeController {
         jokeService.deleteJoke(id);
     }
 
+    @GetMapping("/setups")
+    public List<JokeDTO> getSetups() {
+        return jokeService.getSetups();
+    }
+
+    @GetMapping("buy/{id}")
+    public JokeDTO buyJoke(@PathVariable("id") long id) {
+        return jokeService.buyJoke(id);
+    }
 }
