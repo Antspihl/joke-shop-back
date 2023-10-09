@@ -4,7 +4,6 @@ import ee.veebiprojekt.veebiprojekttest.dto.JokeDTO;
 import ee.veebiprojekt.veebiprojekttest.service.JokeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ee.veebiprojekt.veebiprojekttest.entity.Joke;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class JokeController {
     }
 
     @GetMapping("/all")
-    public List<Joke> getJokes() {
+    public List<JokeDTO> getJokes() {
         return jokeService.getJokes();
     }
 
@@ -37,6 +36,16 @@ public class JokeController {
     @DeleteMapping("/{id}")
     public void removeJoke(@PathVariable("id") long id) {
         jokeService.deleteJoke(id);
+    }
+
+    @GetMapping("/buy/{id}")
+    public JokeDTO buyJoke(@PathVariable("id") long id) {
+        return jokeService.buyJoke(id);
+    }
+
+    @GetMapping("/setups")
+    public List<JokeDTO> getSetups() {
+        return jokeService.getSetups();
     }
 
 }
