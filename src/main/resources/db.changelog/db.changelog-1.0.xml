@@ -10,7 +10,7 @@
             <column name="joke_id" type="SERIAL">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="setup" type="VARCHAR(255)" >
+            <column name="setup" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="punchline" type="VARCHAR(255)">
@@ -79,7 +79,7 @@
         </createTable>
         <addForeignKeyConstraint baseTableName="shop_carts" baseColumnNames="user_id" constraintName="fk_user_id"
                                  referencedTableName="users" referencedColumnNames="user_id"
-                                    onDelete="CASCADE"/>
+                                 onDelete="CASCADE"/>
     </changeSet>
 
     <!-- Create the 'cart_items' table -->
@@ -97,10 +97,10 @@
         </createTable>
         <addForeignKeyConstraint baseTableName="cart_items" baseColumnNames="cart_id" constraintName="fk_cart_id"
                                  referencedTableName="shop_carts" referencedColumnNames="cart_id"
-                                    onDelete="CASCADE"/>
+                                 onDelete="CASCADE"/>
         <addForeignKeyConstraint baseTableName="cart_items" baseColumnNames="joke_id" constraintName="fk_joke_id"
                                  referencedTableName="jokes" referencedColumnNames="joke_id"
-                                    onDelete="CASCADE"/>
+                                 onDelete="CASCADE"/>
     </changeSet>
 
     <!-- Insert data into 'jokes' table -->
@@ -112,6 +112,49 @@
             VALUES ('What do you call a fish with no eyes?', 'A fsh', 15.00);
             INSERT INTO jokes (setup, punchline)
             VALUES ('What do you call a deer with no eyes?', 'No eye deer(No idea)');
+            INSERT INTO jokes (setup, punchline, price)
+            VALUES ('Mida ütleb sõidueksamineerija kohvikus?', 'Anna teed', 5.00);
+            INSERT INTO jokes (setup, punchline, price)
+            VALUES ('Teate, miks mul kaardimängus veab, aga võiduajamistel mitte kunagi?',
+                    'Proovi ise hobust käisesse peita', 3.00);
+            INSERT INTO jokes (setup, punchline, price)
+            VALUES ('Kõik ütlevad, et praegu on andmise aeg. Seega ...', 'Ma annan alla', 1.00);
+            INSERT INTO jokes (setup, punchline, price)
+            VALUES ('Süütu...', 'Vanaema', 0.30);
+            INSERT INTO jokes (setup, punchline, price)
+            VALUES ('Mis oli triikimisvõistluse tulemus?', 'Viik', 1.00);
+            INSERT INTO jokes (setup, punchline, price)
+            VALUES ('Mis on siis, kui vaadata Eesti 2. presidendist must-valget pilti?',
+                    '*meloodiasse* Siis on Meri, hülgehall...', 10.00);
+            INSERT INTO jokes (setup, punchline, price)
+            VALUES ('"Täna pakkus kolm meest mulle kohta bussis", kiitleb naine mehe ees',
+                    '"Ja kuidas oli? Kas sa mahtusid ära?"', 1.00);
+            INSERT INTO jokes (setup, punchline, price)
+            VALUES ('Kas Mona Lisa on kodus?', 'Ei, ta on Maal', 0.10);
+            INSERT INTO jokes (setup, punchline, price)
+            VALUES ('Ma arvan, et mu naine petab mind. Ta ütles: "Mul läheb 30 minutit, Max!"', 'Mu nimi on Kaspar',
+                    1.00);
+            INSERT INTO jokes (setup, punchline, price)
+            VALUES ('Tead, mida ma ütlesin rootslasele, kelle leidsin oma naisega voodist?',
+                    'Mitte midagi, ma ei oska rootsi keelt.', 0.50);
+            INSERT INTO jokes (setup, punchline, price)
+            VALUES ('"Küll see välimus võib petlik olla"...', ', ütles siil saapaharja pealt maha ronides', 1.00);
+            INSERT INTO jokes (setup, punchline, price)
+            VALUES ('Miks kukk terve elu laulab?', 'Sest tal on palju naisi ja mitte ühtegi ämma', 1.00);
+            INSERT INTO jokes (setup, punchline, price)
+            VALUES ('Turist külastab Loch Nessi järve lootuses kohata kuulsat koletist ning küsib kohalikult: "Millal seda meremadu näha saab?"',
+                    'Tavaliselt pärast viiendat klaasi viskit', 1.00);
+            INSERT INTO jokes (setup, punchline, price)
+            VALUES ('"Mul on raske teile diagnoosi panna. Tõenäoliselt on tegemist alkoholiga."',
+                    '"Hästi, doktor, ma tulen siis, kui te kaine olete"', 1.00);
+            INSERT INTO jokes (setup, punchline, price)
+            VALUES ('"Kuidas eksam läks?"',
+                    '"Imeliselt, õppejõud palusid sügisel korrata"', 1.00);
+            INSERT INTO jokes (setup, punchline, price)
+            VALUES ('Vanaprouad mängivad kaarte kodus, kuni kostub koputus uksel:"Tervist, tulin valvet teile panema."',
+                    'Perenaine siis hõikab:"Valve, sinu juurde tuldi"', 1.00);
+
+
         </sql>
     </changeSet>
 
