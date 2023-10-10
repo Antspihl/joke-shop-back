@@ -34,8 +34,8 @@ public class JokeService {
         return jokeMapper.toDTO(joke);
     }
 
-    public List<Joke> getJokes() {
-        return jokeRepository.findAll();
+    public List<JokeDTO> getJokes() {
+        return jokeMapper.toDTOList(jokeRepository.findAll());
     }
 
     public JokeDTO editJoke(long id, JokeDTO newJoke) {
@@ -52,16 +52,16 @@ public class JokeService {
         jokeRepository.deleteById(id);
     }
 
-    public List<JokeDTO> getSetups() {
-        List<Joke> jokes = jokeRepository.findAll();
-        jokes.forEach(joke -> joke.setPunchline(null));
-        return jokeMapper.toDTOList(jokes);
-    }
-
     public JokeDTO buyJoke(long id) {
         Joke joke = jokeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
         joke.setTimesBought(joke.getTimesBought() + 1);
         jokeRepository.save(joke);
         return jokeMapper.toDTO(joke);
+    }
+
+    public List<JokeDTO> getSetups() {
+        List<Joke> jokes = jokeRepository.findAll();
+        jokes.forEach(joke -> joke.setPunchline(null));
+        return jokeMapper.toDTOList(jokes);
     }
 }
