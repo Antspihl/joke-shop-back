@@ -20,5 +20,5 @@ public class Joke {
     @Column(name = "price")
     private BigDecimal price = BigDecimal.ONE;
     @Column(name = "times_bought")
-    private long timesBought = 0;
+    private long timesBought;
 }
