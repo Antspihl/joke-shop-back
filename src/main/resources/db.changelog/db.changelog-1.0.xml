@@ -40,6 +40,9 @@
             </column>
             <column name="is_admin" type="BOOLEAN" defaultValueBoolean="false">
             </column>
+            <column name="salt" type="VARCHAR(8)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 
@@ -118,10 +121,10 @@
     <!-- Insert data into 'users' table -->
     <changeSet id="insert-users-data" author="mattias">
         <sql>
-            INSERT INTO users (username, email, password_hash, full_name, is_admin)
-            VALUES ('admin', 'admin@gmail.com', '$2a$abcdefgh', 'Admin', true);
-            INSERT INTO users (username, email, password_hash, full_name, is_admin)
-            VALUES ('user', 'ilmar@gmail.com', '$2a$123456', 'Ilmar', false);
+            INSERT INTO users (username, email, password_hash, full_name, is_admin, salt)
+            VALUES ('admin', 'admin@gmail.com', '$2a$abcdefgh', 'Admin', true, 'abcdefgh');
+            INSERT INTO users (username, email, password_hash, full_name, is_admin, salt)
+            VALUES ('user', 'ilmar@gmail.com', '$2a$123456', 'Ilmar', false, '123456');
         </sql>
     </changeSet>
 
