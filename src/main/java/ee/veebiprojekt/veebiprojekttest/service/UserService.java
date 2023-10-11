@@ -2,6 +2,7 @@ package ee.veebiprojekt.veebiprojekttest.service;
 
 import ee.veebiprojekt.veebiprojekttest.dto.UserDTO;
 import ee.veebiprojekt.veebiprojekttest.entity.User;
+import ee.veebiprojekt.veebiprojekttest.exception.FieldNotUniqueException;
 import ee.veebiprojekt.veebiprojekttest.mapper.UserMapper;
 import ee.veebiprojekt.veebiprojekttest.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,21 @@ public class UserService {
     }
 
     public UserDTO register(UserDTO userDTO) {
+        //Check if userDTO has no null values
+        if (userDTO.username() == null || userDTO.passwordHash() == null ||
+                userDTO.email() == null || userDTO.fullName() == null) {
+            throw new IllegalArgumentException("UserDTO has null values");
+        }
+        //Check if username is already taken
+        if (userRepository.findByUsername(userDTO.username()) != null) {
+            throw new FieldNotUniqueException(userDTO.username());
+        }
+        //Check if email is already taken
+        if (userRepository.findByEmail(userDTO.email()) != null) {
+            throw new FieldNotUniqueException(userDTO.email());
+        }
         User user = userMapper.toEntity(userDTO);
-        user = userRepository.save(user);
+        userRepository.save(user);
         return userMapper.toDTO(user);
     }
 
