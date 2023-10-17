@@ -29,7 +29,7 @@ public class RatingController {
         return ratingService.getRatings();
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public RatingDTO editRating(@RequestBody RatingDTO ratingDTO, @PathVariable Long id) {
         return ratingService.editRating(ratingDTO, id);
     }

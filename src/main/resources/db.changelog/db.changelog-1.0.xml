@@ -18,6 +18,7 @@
             </column>
             <column name="price" type="NUMERIC(8,2)" defaultValueNumeric="1"/>
             <column name="times_bought" type="INT" defaultValueNumeric="0"/>
+            <column name="rating" type="NUMERIC(2,1)" defaultValueNumeric="0"/>
         </createTable>
     </changeSet>
 

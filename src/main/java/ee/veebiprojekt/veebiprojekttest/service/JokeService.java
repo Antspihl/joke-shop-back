@@ -2,9 +2,11 @@ package ee.veebiprojekt.veebiprojekttest.service;
 
 import ee.veebiprojekt.veebiprojekttest.dto.JokeDTO;
 import ee.veebiprojekt.veebiprojekttest.entity.Joke;
+import ee.veebiprojekt.veebiprojekttest.entity.Rating;
 import ee.veebiprojekt.veebiprojekttest.mapper.JokeMapper;
 import ee.veebiprojekt.veebiprojekttest.repository.JokeRepository;
 import ee.veebiprojekt.veebiprojekttest.exception.EntityNotFoundException;
+import ee.veebiprojekt.veebiprojekttest.repository.RatingRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,10 +15,12 @@ import java.util.List;
 public class JokeService {
     private final JokeRepository jokeRepository;
     private final JokeMapper jokeMapper;
+    private final RatingRepository ratingRepository;
 
-    public JokeService(JokeRepository jokeRepository, JokeMapper jokeMapper) {
+    public JokeService(JokeRepository jokeRepository, JokeMapper jokeMapper, RatingRepository ratingRepository) {
         this.jokeRepository = jokeRepository;
         this.jokeMapper = jokeMapper;
+        this.ratingRepository = ratingRepository;
     }
 
     public JokeDTO addJoke(JokeDTO jokeDTO) {
@@ -46,6 +50,17 @@ public class JokeService {
         if (newJoke.timesBought() != null) joke.setTimesBought(newJoke.timesBought());
         jokeRepository.save(joke);
         return jokeMapper.toDTO(joke);
+    }
+
+    public void recalculateJokeRating(long id) {
+        Joke joke = jokeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
+        List<Rating> ratings = ratingRepository.findAllByJokeId(id);
+        double newRating = ratings.stream()
+                .mapToInt(Rating::getRatingValue)
+                .average()
+                .orElse(0.0);
+        joke.setRating(newRating);
+        jokeRepository.save(joke);
     }
 
     public void deleteJoke(long id) {
