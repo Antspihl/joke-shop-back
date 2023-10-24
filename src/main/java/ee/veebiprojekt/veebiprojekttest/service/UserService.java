@@ -7,6 +7,8 @@ import ee.veebiprojekt.veebiprojekttest.mapper.UserMapper;
 import ee.veebiprojekt.veebiprojekttest.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -40,6 +42,12 @@ public class UserService {
         User user = userRepository.findByUsername(username);
         user.setPasswordHash(null);
         return userMapper.toDTO(user);
+    }
+
+    public List<UserDTO> getUsers() {
+        List<User> users = userRepository.findAll();
+        users.forEach(user -> user.setPasswordHash(null));
+        return userMapper.toDTOList(users);
     }
 
     public boolean checkPasswordByUsername(String username, String passwordHash) {
