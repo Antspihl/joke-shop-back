@@ -24,6 +24,7 @@ deploy backend:
   tags:
     - main
   script:
-    - cd /opt/lyhike-nimi
+    - echo | pwd
+    - cd ~/veebiprojekt
     - docker-compose down
     - docker-compose up -d
