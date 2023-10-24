@@ -1,0 +1,26 @@
+stages:
+  - build
+  - deploy
+
+build test-backend:
+  stage: build
+  only:
+    refs:
+      - main
+  tags:
+    - main
+  script:
+#    - chmod +x ./mvnw
+    - ./gradlew build
+    - docker build -t lyhike-nimi
+#deploy test-backend:
+#  stage: deploy
+#  only:
+#    refs:
+#      - main
+#  tags:
+#    - main
+#  script:
+#    - cd /opt/web-project
+#    - docker-compose down
+#    - docker-compose up -d
