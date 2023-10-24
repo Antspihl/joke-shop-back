@@ -11,8 +11,7 @@ build backend:
     - main
   script:
     - ./gradlew build
-    - docker build -t lyhike-nimi ./
-    - echo $DOCKER_USER
+    - docker build -t lyhike-nimi .
     - echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
     - docker image ls
     - docker tag lyhike-nimi:latest lyhike/lyhike-nimi:latest
@@ -25,7 +24,6 @@ deploy backend:
   tags:
     - main
   script:
-    - cd ~/veebiprojekt
+    - cd /opt/lyhike-nimi
     - docker-compose down
     - docker-compose up -d
-#    - chmod +x ./mvnw
