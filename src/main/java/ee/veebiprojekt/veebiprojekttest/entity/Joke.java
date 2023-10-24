@@ -21,4 +21,6 @@ public class Joke {
     private BigDecimal price = BigDecimal.ONE;
     @Column(name = "times_bought")
     private long timesBought;
+    @Column(name = "rating")
+    private double rating;
 }

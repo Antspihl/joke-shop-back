@@ -18,6 +18,7 @@
             </column>
             <column name="price" type="NUMERIC(8,2)" defaultValueNumeric="1"/>
             <column name="times_bought" type="INT" defaultValueNumeric="0"/>
+            <column name="rating" type="NUMERIC(2,1)" defaultValueNumeric="0"/>
         </createTable>
     </changeSet>
 
@@ -172,16 +173,16 @@
     </changeSet>
 
     <!-- Insert data into 'ratings' table -->
-    <changeSet id="insert-ratings-data" author="mattias">
-        <sql>
-            INSERT INTO ratings (joke_id, rating_value, author_id)
-            VALUES (1, 4, 2);
-            INSERT INTO ratings (joke_id, rating_value, author_id)
-            VALUES (2, 3, 2);
-            INSERT INTO ratings (joke_id, rating_value, author_id)
-            VALUES (3, 5, 2);
-        </sql>
-    </changeSet>
+<!--    <changeSet id="insert-ratings-data" author="mattias">-->
+<!--        <sql>-->
+<!--            INSERT INTO ratings (joke_id, rating_value, author_id)-->
+<!--            VALUES (1, 4, 2);-->
+<!--            INSERT INTO ratings (joke_id, rating_value, author_id)-->
+<!--            VALUES (2, 3, 2);-->
+<!--            INSERT INTO ratings (joke_id, rating_value, author_id)-->
+<!--            VALUES (3, 5, 2);-->
+<!--        </sql>-->
+<!--    </changeSet>-->
 
     <!-- Insert data into 'shop_carts' table -->
     <changeSet id="insert-shop-carts-data" author="mattias">

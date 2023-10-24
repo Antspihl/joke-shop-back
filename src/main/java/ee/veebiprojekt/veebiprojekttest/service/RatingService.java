@@ -14,10 +14,12 @@ import java.util.List;
 public class RatingService {
     private final RatingRepository ratingRepository;
     private final RatingMapper ratingMapper;
+    private final JokeService jokeService;
 
-    public RatingService(RatingRepository ratingRepository, RatingMapper ratingMapper) {
+    public RatingService(RatingRepository ratingRepository, RatingMapper ratingMapper, JokeService jokeService) {
         this.ratingRepository = ratingRepository;
         this.ratingMapper = ratingMapper;
+        this.jokeService = jokeService;
     }
 
     private Rating authRatingDto(RatingDTO ratingDTO) {
@@ -37,6 +39,7 @@ public class RatingService {
     public RatingDTO addRating(RatingDTO ratingDTO) {
         Rating rating = authRatingDto(ratingDTO);
         ratingRepository.save(rating);
+        jokeService.recalculateJokeRating(ratingDTO.jokeId());
         return ratingDTO;
     }
 
@@ -57,12 +60,14 @@ public class RatingService {
         if (ratingDTO.ratingValue() != null) rating.setRatingValue(ratingDTO.ratingValue());
         if (ratingDTO.jokeId() != null) rating.setJokeId(ratingDTO.jokeId());
         ratingRepository.save(rating);
+        jokeService.recalculateJokeRating(rating.getJokeId());
         return ratingMapper.toDTO(rating);
     }
 
     public RatingDTO deleteRating(Long id) {
         Rating rating = ratingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
         ratingRepository.deleteById(id);
+        jokeService.recalculateJokeRating(rating.getJokeId());
         return ratingMapper.toDTO(rating);
     }
 }
