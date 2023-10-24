@@ -12,7 +12,7 @@ build test-backend:
   script:
 #    - chmod +x ./mvnw
     - ./gradlew build
-    - docker build -t lyhike-nimi
+    - docker build -t lyhike-nimi .
 #deploy test-backend:
 #  stage: deploy
 #  only:
