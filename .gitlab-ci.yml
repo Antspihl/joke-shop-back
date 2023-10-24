@@ -2,7 +2,7 @@ stages:
   - build
   - deploy
 
-build test-backend:
+build backend:
   stage: build
   only:
     refs:
@@ -12,18 +12,19 @@ build test-backend:
   script:
     - ./gradlew build
     - docker build -t lyhike-nimi ./
+    - echo '$DOCKER_PASS' | docker login -u '$DOCKER_USER' --password-stdin
     - docker image ls
     - docker tag lyhike-nimi:latest lyhike/lyhike-nimi:latest
     - docker push lyhike/lyhike-nimi:latest
-#deploy test-backend:
-#  stage: deploy
-#  only:
-#    refs:
-#      - main
-#  tags:
-#    - main
-#  script:
-#    - cd /opt/web-project
-#    - docker-compose down
-#    - docker-compose up -d
+deploy backend:
+  stage: deploy
+  only:
+    refs:
+      - main
+  tags:
+    - main
+  script:
+    - cd ~/veebiprojekt
+    - docker-compose down
+    - docker-compose up -d
 #    - chmod +x ./mvnw
