@@ -5,6 +5,8 @@ import ee.veebiprojekt.veebiprojekttest.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
@@ -19,6 +21,11 @@ public class UserController {
     @GetMapping("/username/{username}")
     public UserDTO getUser(@PathVariable String username) {
         return userService.getUserInfo(username);
+    }
+
+    @GetMapping("/all")
+    public List<UserDTO> getUsers() {
+        return userService.getUsers();
     }
 
     @GetMapping("/username/{username}/password/{passwordHash}")
