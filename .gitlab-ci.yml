@@ -26,5 +26,5 @@ deploy backend:
   script:
     - echo | pwd
     - cd ~/veebiprojekt
-    - docker-compose down
-    - docker-compose up -d
+#    - docker-compose down
+#    - docker-compose up -d
