@@ -10,9 +10,10 @@ build test-backend:
   tags:
     - main
   script:
-#    - chmod +x ./mvnw
     - ./gradlew build
     - docker build -t lyhike-nimi ./
+    - docker tag lyhike-nimi:latest lyhike/lyhike-nimi:latest
+    - docker push lyhike/lyhike-nimi:latest
 #deploy test-backend:
 #  stage: deploy
 #  only:
@@ -24,3 +25,4 @@ build test-backend:
 #    - cd /opt/web-project
 #    - docker-compose down
 #    - docker-compose up -d
+#    - chmod +x ./mvnw
