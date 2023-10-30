@@ -17,7 +17,7 @@ build backend:
     - docker tag lyhike-nimi:latest lyhike/lyhike-nimi:latest
     - docker push lyhike/lyhike-nimi:latest
 deploy backend:
-  stage: build
+  stage: deploy
   only:
     refs:
       - main
