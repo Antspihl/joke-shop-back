@@ -25,5 +25,3 @@ deploy backend:
     - main
   script:
     - sfadsf
-#    - docker-compose down
-#    - docker-compose up -d
