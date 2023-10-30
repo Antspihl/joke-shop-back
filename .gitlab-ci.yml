@@ -24,4 +24,9 @@ deploy backend:
   tags:
     - main
   script:
-    - sfadsf
+    - ./gradlew build
+    - docker build -t lyhike-nimi .
+    - echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+    - docker image ls
+    - docker tag lyhike-nimi:latest lyhike/lyhike-nimi:latest
+    - docker push lyhike/lyhike-nimi:latest
