@@ -24,4 +24,4 @@ deploy backend:
   tags:
     - main
   script:
-    - cd /root/veebiprojekt
+    - pwd
