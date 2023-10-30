@@ -24,7 +24,6 @@ deploy backend:
   tags:
     - main
   script:
-    - echo | pwd
     - cd ~/veebiprojekt
 #    - docker-compose down
 #    - docker-compose up -d
