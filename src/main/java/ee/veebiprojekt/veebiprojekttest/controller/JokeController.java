@@ -48,4 +48,9 @@ public class JokeController {
         return jokeService.getSetups();
     }
 
+    @GetMapping("/top3")
+    public List<JokeDTO> getTop3() {
+        return jokeService.getTop3();
+    }
+
 }
