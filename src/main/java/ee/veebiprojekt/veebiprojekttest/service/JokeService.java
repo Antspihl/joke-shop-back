@@ -9,6 +9,7 @@ import ee.veebiprojekt.veebiprojekttest.exception.EntityNotFoundException;
 import ee.veebiprojekt.veebiprojekttest.repository.RatingRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -76,6 +77,16 @@ public class JokeService {
 
     public List<JokeDTO> getSetups() {
         List<Joke> jokes = jokeRepository.findAll();
+        jokes.forEach(joke -> joke.setPunchline(null));
+        return jokeMapper.toDTOList(jokes);
+    }
+
+    public List<JokeDTO> getTop3() {
+        List<Joke> jokes = jokeRepository.findAllByOrderByTimesBoughtDesc();
+        if (jokes.stream().allMatch(joke -> joke.getTimesBought() == 0)) {
+            Collections.shuffle(jokes);
+        }
+        jokes = jokes.subList(0, 3);
         jokes.forEach(joke -> joke.setPunchline(null));
         return jokeMapper.toDTOList(jokes);
     }
