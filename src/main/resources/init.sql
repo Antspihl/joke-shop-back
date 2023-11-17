@@ -58,6 +58,24 @@ INSERT INTO users (username, email, password_hash, full_name, is_admin)
 VALUES ('admin', 'admin@gmail.com', '$2a$abcdefgh', 'Admin', true);
 INSERT INTO users (username, email, password_hash, full_name, is_admin)
 VALUES ('user', 'ilmar@gmail.com', '$2a$123456', 'Ilmar', false);
+INSERT INTO users (username, email, password_hash, full_name, is_admin)
+VALUES ('test1', 'test1@gmail.com', '$2a$1234567', 'Ants', true);
+INSERT INTO users (username, email, password_hash, full_name, is_admin)
+VALUES ('test2', 'test2@gmail.com', '$2a$1234568', 'Pets', true);
+INSERT INTO users (username, email, password_hash, full_name, is_admin)
+VALUES ('test3', 'test3@gmail.com', '$2a$1234569', 'Pets', true);
+INSERT INTO users (username, email, password_hash, full_name, is_admin)
+VALUES ('test4', 'test4@gmail.com', '$2a$1234560', 'test', false);
+INSERT INTO users (username, email, password_hash, full_name, is_admin)
+VALUES ('test5', 'test5@gmail.com', '$2a$1234577', 'Ants', true);
+INSERT INTO users (username, email, password_hash, full_name, is_admin)
+VALUES ('test6', 'test6@gmail.com', '$2a$1234578', 'Pets', true);
+INSERT INTO users (username, email, password_hash, full_name, is_admin)
+VALUES ('test7', 'test7@gmail.com', '$2a$1234579', 'Pets', true);
+INSERT INTO users (username, email, password_hash, full_name, is_admin)
+VALUES ('test8', 'test8@gmail.com', '$2a$1234570', 'test', false);
+INSERT INTO users (username, email, password_hash, full_name, is_admin)
+VALUES ('test9', 'test9@gmail.com', '$2a$1234571', 'Peedu', false);
 
 INSERT INTO ratings (joke_id, rating_value, author_id)
 VALUES (1, 4, 2);

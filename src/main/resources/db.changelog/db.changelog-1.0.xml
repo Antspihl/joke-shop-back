@@ -169,6 +169,25 @@
             VALUES ('admin', 'admin@gmail.com', '$2a$abcdefgh', 'Admin', true, 'abcdefgh');
             INSERT INTO users (username, email, password_hash, full_name, is_admin, salt)
             VALUES ('user', 'ilmar@gmail.com', '$2a$123456', 'Ilmar', false, '123456');
+            INSERT INTO users (username, email, password_hash, full_name, is_admin, salt)
+            VALUES ('test1', 'test1@gmail.com', '$2a$1234567', 'Ants', true, '1234567');
+            INSERT INTO users (username, email, password_hash, full_name, is_admin, salt)
+            VALUES ('test2', 'test2@gmail.com', '$2a$1234568', 'Pets', true, '1234568');
+            INSERT INTO users (username, email, password_hash, full_name, is_admin, salt)
+            VALUES ('test3', 'test3@gmail.com', '$2a$1234569', 'Pets', true, '1234569');
+            INSERT INTO users (username, email, password_hash, full_name, is_admin, salt)
+            VALUES ('test4', 'test4@gmail.com', '$2a$1234560', 'test', false, '1234560');
+            INSERT INTO users (username, email, password_hash, full_name, is_admin, salt)
+            VALUES ('test5', 'test5@gmail.com', '$2a$1234577', 'Ants', true, '1234577');
+            INSERT INTO users (username, email, password_hash, full_name, is_admin, salt)
+            VALUES ('test6', 'test6@gmail.com', '$2a$1234578', 'Pets', true, '1234578');
+            INSERT INTO users (username, email, password_hash, full_name, is_admin, salt)
+            VALUES ('test7', 'test7@gmail.com', '$2a$1234579', 'Pets', true, '1234579');
+            INSERT INTO users (username, email, password_hash, full_name, is_admin, salt)
+            VALUES ('test8', 'test8@gmail.com', '$2a$1234570', 'test', false, '1234570');
+            INSERT INTO users (username, email, password_hash, full_name, is_admin, salt)
+            VALUES ('test9', 'test9@gmail.com', '$2a$1234571', 'Peedu', false, '1234571');
+
         </sql>
     </changeSet>
 
