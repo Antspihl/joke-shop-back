@@ -1,13 +1,15 @@
 package ee.veebiprojekt.veebiprojekttest.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Table(name = "jokes")
 @Entity
-@Data
+@Setter
+@Getter
 public class Joke {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

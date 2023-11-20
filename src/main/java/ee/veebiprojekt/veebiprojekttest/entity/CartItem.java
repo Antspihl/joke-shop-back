@@ -1,12 +1,14 @@
 package ee.veebiprojekt.veebiprojekttest.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 
 @Table(name = "cart_items")
 @Entity
-@Data
+@Setter
+@Getter
 public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

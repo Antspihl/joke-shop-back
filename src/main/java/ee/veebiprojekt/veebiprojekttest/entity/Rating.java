@@ -1,11 +1,13 @@
 package ee.veebiprojekt.veebiprojekttest.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Table(name = "ratings")
 @Entity
-@Data
+@Setter
+@Getter
 public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
