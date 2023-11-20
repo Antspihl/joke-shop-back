@@ -26,4 +26,22 @@
             VALUES ('test9', 'test9@gmail.com', '$2a$1234571', 'Peedu', false, '1234571');
         </sql>
     </changeSet>
+
+    <!-- Remove salt column from User -->
+    <changeSet id="Remove_salt_column" author="Indrek">
+        <dropColumn tableName="users" columnName="salt"/>
+    </changeSet>
+
+    <!-- Remove all users and insert useful users-->
+    <changeSet id="Remove users and add useful users" author="indrek">
+        <sql>
+            DELETE FROM users;
+            INSERT INTO users (username, email, password_hash, full_name, is_admin)
+            VALUES ('Indrek', 'papa@pihl.ip', '$2a$10$bwfv0SqrA/kXkJAUUgRF9uqbchb0Fzore.mXVJG4XX98C5P8eW5kC', 'Ants Pihl', true);
+            INSERT INTO users (username, email, password_hash, full_name, is_admin)
+            VALUES ('Raba', 'isa@servu.mr', '$2a$10$HFfUlDn3bhJs/tYANlMG9eFa7Dh1gnETyU1pPcHp8XpC7JrGztuk6', 'Ma Soo', true);
+            INSERT INTO users (username, email, password_hash, full_name, is_admin)
+            VALUES ('Nele', 'ema@front.ns', '$2a$10$PTGp5BloueCvfIaDftvYGO8Pk79u8JSApYnwBm567OAbArmRo295W', 'Liis Sams', true);
+        </sql>
+    </changeSet>
 </databaseChangeLog>

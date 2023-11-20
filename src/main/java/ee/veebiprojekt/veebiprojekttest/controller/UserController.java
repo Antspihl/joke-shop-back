@@ -3,7 +3,10 @@ package ee.veebiprojekt.veebiprojekttest.controller;
 import ee.veebiprojekt.veebiprojekttest.dto.UserDTO;
 import ee.veebiprojekt.veebiprojekttest.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -13,11 +16,6 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("/register")
-    public UserDTO register(@RequestBody UserDTO userDTO) {
-        return userService.register(userDTO);
-    }
-
     @GetMapping("/username/{username}")
     public UserDTO getUser(@PathVariable String username) {
         return userService.getUserInfo(username);
@@ -26,15 +24,5 @@ public class UserController {
     @GetMapping("/all")
     public List<UserDTO> getUsers() {
         return userService.getUsers();
-    }
-
-    @GetMapping("/username/{username}/password/{passwordHash}")
-    public boolean checkPasswordByUsername(@PathVariable String username, @PathVariable String passwordHash) {
-        return userService.checkPasswordByUsername(username, passwordHash);
-    }
-
-    @GetMapping("/email/{email}/password/{passwordHash}")
-    public boolean checkPasswordByEmail(@PathVariable String email, @PathVariable String passwordHash) {
-        return userService.checkPasswordByEmail(email, passwordHash);
     }
 }

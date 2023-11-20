@@ -19,10 +19,8 @@ public class User {
     private String email;
     @Column(name = "password_hash")
     private String passwordHash;
-    @Column(name = "salt")
-    private String salt;
     @Column(name = "is_admin")
     private boolean isAdmin;
-    @Column(name="full_name")
+    @Column(name = "full_name")
     private String fullName;
 }
