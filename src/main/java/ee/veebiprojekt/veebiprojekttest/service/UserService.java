@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -74,7 +75,8 @@ public class UserService {
         if (!correctPassword) {
             throw new IllegalArgumentException("Incorrect password");
         }
-        Map<String, Object> claims = Map.of("username", username);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("username", username);
         return Jwts.builder()
                 .setSubject("naljapood")
                 .addClaims(claims)

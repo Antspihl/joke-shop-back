@@ -15,6 +15,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
 
     private final JwtRequestFilter jwtRequestFilter;
+    private static final String ADMIN = "ROLE_ADMIN";
+    private static final String USER = "ROLE_USER";
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -29,7 +31,16 @@ public class SecurityConfiguration {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/jokes/**").authenticated()
+                        .requestMatchers("/api/carts/**").hasAnyAuthority(ADMIN, USER)
+                        .requestMatchers("/api/cart_items/**").hasAnyAuthority(ADMIN, USER)
+                        .requestMatchers("/api/ratings/**").hasAnyAuthority(ADMIN, USER)
+                        .requestMatchers("/api/jokes/add").hasAnyAuthority(ADMIN, USER)
+                        .requestMatchers("/api/jokes/get/**").hasAnyAuthority(USER, ADMIN)
+                        .requestMatchers("/api/jokes/all").hasAuthority(ADMIN)
+                        .requestMatchers("/api/jokes/buy").hasAnyAuthority(USER, ADMIN)
+                        .requestMatchers("/api/jokes/").authenticated()
+                        .requestMatchers("/api/jokes/setups").permitAll()
+                        .requestMatchers("/api/jokes/top3").permitAll()
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

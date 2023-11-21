@@ -1,5 +1,9 @@
 package ee.veebiprojekt.veebiprojekttest.config;
 
+import ee.veebiprojekt.veebiprojekttest.entity.User;
+import ee.veebiprojekt.veebiprojekttest.entity.UserRole;
+import ee.veebiprojekt.veebiprojekttest.repository.UserRepository;
+import ee.veebiprojekt.veebiprojekttest.repository.UserRoleRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -9,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -18,12 +23,17 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.security.Key;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Component
 @AllArgsConstructor
+@Slf4j
 public class JwtRequestFilter extends OncePerRequestFilter {
+
+    private final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository;
 
     private final Key jwtSecretKey = Keys.hmacShaKeyFor("Kui on meri hülgehall, ja sind ründamas suur hall".getBytes());
 
@@ -62,12 +72,32 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     }
 
     private UsernamePasswordAuthenticationToken buildAuthToken(Claims claims) {
+        String username = claims.get("username", String.class);
         return new UsernamePasswordAuthenticationToken(
-                claims.get("username"),
+                username,
                 "",
-                List.of(new SimpleGrantedAuthority("ROLE_USER"))
+                getAuth(username)
         );
     }
 
+    private Set<SimpleGrantedAuthority> getAuth(String username) {
+        Set<SimpleGrantedAuthority> auths = new HashSet<>();
+        User user = userRepository.findByUsername(username);
+        log.debug("User with username " + username + " found.");
+        if (user == null) {
+            log.debug("User with username " + username + " not found.");
+            return auths;
+        }
 
+        Long userId = user.getUserId();
+        UserRole userRole = userRoleRepository.getUserRoleByUserId(userId);
+        Long userRoleId = userRole.getRoleId();
+        if (userRoleId == 1) {
+            auths.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            auths.add(new SimpleGrantedAuthority("ROLE_USER"));
+        } else if (userRoleId == 2) {
+            auths.add(new SimpleGrantedAuthority("ROLE_USER"));
+        }
+        return auths;
+    }
 }

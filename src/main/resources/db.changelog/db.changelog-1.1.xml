@@ -27,12 +27,10 @@
         </sql>
     </changeSet>
 
-    <!-- Remove salt column from User -->
     <changeSet id="Remove_salt_column" author="Indrek">
         <dropColumn tableName="users" columnName="salt"/>
     </changeSet>
 
-    <!-- Remove all users and insert useful users-->
     <changeSet id="Remove users and add useful users" author="indrek">
         <sql>
             DELETE FROM users;
@@ -42,6 +40,35 @@
             VALUES ('Raba', 'isa@servu.mr', '$2a$10$HFfUlDn3bhJs/tYANlMG9eFa7Dh1gnETyU1pPcHp8XpC7JrGztuk6', 'Ma Soo', true);
             INSERT INTO users (username, email, password_hash, full_name, is_admin)
             VALUES ('Nele', 'ema@front.ns', '$2a$10$PTGp5BloueCvfIaDftvYGO8Pk79u8JSApYnwBm567OAbArmRo295W', 'Liis Sams', true);
+            INSERT INTO users (username, email, password_hash, full_name, is_admin)
+            VALUES ('user', 'user@user.ee', '$2a$10$UG4/Y5NLjwewvGfgwt68WeCvlt2lFd.VCprkIN.Bqu7NXR7MGHL9m', 'User User', false);
+        </sql>
+    </changeSet>
+
+    <changeSet id="Add new table UserRole and add admins" author="indrek">
+        <createTable tableName="user_role">
+            <column name="user_role_id" type="SERIAL">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_role_pk"/>
+            </column>
+            <column name="role_id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_role_pk"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="user_role" baseColumnNames="user_id"
+                                 constraintName="user_role_fk" referencedTableName="users"
+                                 referencedColumnNames="user_id"/>
+        <sql>
+            INSERT INTO user_role (user_id, role_id)
+            VALUES (12, 1);
+            INSERT INTO user_role (user_id, role_id)
+            VALUES (13, 1);
+            INSERT INTO user_role (user_id, role_id)
+            VALUES (14, 1);
+            INSERT INTO user_role (user_id, role_id)
+            VALUES (15, 2);
         </sql>
     </changeSet>
 </databaseChangeLog>
