@@ -75,8 +75,10 @@ public class UserService {
         if (!correctPassword) {
             throw new IllegalArgumentException("Incorrect password");
         }
+        Long id = user.getUserId();
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", username);
+        claims.put("userId", id);
         return Jwts.builder()
                 .setSubject("naljapood")
                 .addClaims(claims)
