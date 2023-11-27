@@ -4,6 +4,7 @@ import ee.veebiprojekt.veebiprojekttest.dto.JokeDTO;
 import ee.veebiprojekt.veebiprojekttest.entity.Joke;
 import ee.veebiprojekt.veebiprojekttest.entity.Rating;
 import ee.veebiprojekt.veebiprojekttest.mapper.JokeMapper;
+import ee.veebiprojekt.veebiprojekttest.repository.BoughtJokeRepository;
 import ee.veebiprojekt.veebiprojekttest.repository.JokeRepository;
 import ee.veebiprojekt.veebiprojekttest.exception.EntityNotFoundException;
 import ee.veebiprojekt.veebiprojekttest.repository.RatingRepository;
@@ -19,12 +20,14 @@ public class JokeService {
     private final JokeRepository jokeRepository;
     private final JokeMapper jokeMapper;
     private final RatingRepository ratingRepository;
+    private final BoughtJokeRepository boughtJokeRepository;
     private static final String ENTITY_NAME = "joke";
 
-    public JokeService(JokeRepository jokeRepository, JokeMapper jokeMapper, RatingRepository ratingRepository) {
+    public JokeService(JokeRepository jokeRepository, JokeMapper jokeMapper, RatingRepository ratingRepository, BoughtJokeRepository boughtJokeRepository) {
         this.jokeRepository = jokeRepository;
         this.jokeMapper = jokeMapper;
         this.ratingRepository = ratingRepository;
+        this.boughtJokeRepository = boughtJokeRepository;
     }
 
     public JokeDTO addJoke(JokeDTO jokeDTO) {
@@ -105,6 +108,12 @@ public class JokeService {
         jokes = jokes.subList(0, 3);
         jokes.forEach(joke -> joke.setPunchline(null));
         log.debug("Top 3 Jokes : {}", jokes);
+        return jokeMapper.toDTOList(jokes);
+    }
+
+    public List<JokeDTO> getBoughtJokes() {
+        log.debug("Request to get bought Jokes");
+        List<Joke> jokes = jokeRepository.findAll();  // todo -> we need user ID here
         return jokeMapper.toDTOList(jokes);
     }
 }

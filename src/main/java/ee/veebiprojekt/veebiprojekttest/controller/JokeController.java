@@ -63,4 +63,10 @@ public class JokeController {
         return jokeService.getTop3();
     }
 
+    @GetMapping("/bought")
+    public List<JokeDTO> getBoughtJokes() {
+        log.debug("REST request to get bought jokes");
+        return jokeService.getBoughtJokes();
+    }
+
 }
