@@ -1,13 +1,16 @@
 package ee.veebiprojekt.veebiprojekttest.service;
 
 import ee.veebiprojekt.veebiprojekttest.dto.JokeDTO;
+import ee.veebiprojekt.veebiprojekttest.entity.BoughtJoke;
 import ee.veebiprojekt.veebiprojekttest.entity.Joke;
 import ee.veebiprojekt.veebiprojekttest.entity.Rating;
+import ee.veebiprojekt.veebiprojekttest.entity.User;
+import ee.veebiprojekt.veebiprojekttest.exception.EntityNotFoundException;
 import ee.veebiprojekt.veebiprojekttest.mapper.JokeMapper;
 import ee.veebiprojekt.veebiprojekttest.repository.BoughtJokeRepository;
 import ee.veebiprojekt.veebiprojekttest.repository.JokeRepository;
-import ee.veebiprojekt.veebiprojekttest.exception.EntityNotFoundException;
 import ee.veebiprojekt.veebiprojekttest.repository.RatingRepository;
+import ee.veebiprojekt.veebiprojekttest.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +23,15 @@ public class JokeService {
     private final JokeRepository jokeRepository;
     private final JokeMapper jokeMapper;
     private final RatingRepository ratingRepository;
+    private final UserRepository userRepository;
     private final BoughtJokeRepository boughtJokeRepository;
     private static final String ENTITY_NAME = "joke";
 
-    public JokeService(JokeRepository jokeRepository, JokeMapper jokeMapper, RatingRepository ratingRepository, BoughtJokeRepository boughtJokeRepository) {
+    public JokeService(JokeRepository jokeRepository, JokeMapper jokeMapper, RatingRepository ratingRepository, UserRepository userRepository, BoughtJokeRepository boughtJokeRepository) {
         this.jokeRepository = jokeRepository;
         this.jokeMapper = jokeMapper;
         this.ratingRepository = ratingRepository;
+        this.userRepository = userRepository;
         this.boughtJokeRepository = boughtJokeRepository;
     }
 
@@ -83,20 +88,16 @@ public class JokeService {
         jokeRepository.deleteById(id);
     }
 
-    public JokeDTO buyJoke(long id) {
-        log.debug("Request to buy Joke : {}", id);
-        Joke joke = jokeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NAME, id));
+    public JokeDTO buyJoke(long jokeId, String username) {
+        log.debug("Request joke {} for {}", jokeId, username);
+        User user = userRepository.findByUsername(username);
+        Joke joke = jokeRepository.findById(jokeId).orElseThrow(() -> new EntityNotFoundException(ENTITY_NAME, jokeId));
         joke.setTimesBought(joke.getTimesBought() + 1);
         jokeRepository.save(joke);
-        log.debug("Bought Joke : {}", joke);
-        return jokeMapper.toDTO(joke);
-    }
+        boughtJokeRepository.save(new BoughtJoke(user.getUserId(), jokeId));
 
-    public List<JokeDTO> getSetups() {
-        log.debug("Request to get all Joke setups");
-        List<Joke> jokes = jokeRepository.findAll();
-        jokes.forEach(joke -> joke.setPunchline(null));
-        return jokeMapper.toDTOList(jokes);
+        log.debug("Bought Joke {} for {}", joke, username);
+        return jokeMapper.toDTO(joke);
     }
 
     public List<JokeDTO> getTop3() {
@@ -111,9 +112,29 @@ public class JokeService {
         return jokeMapper.toDTOList(jokes);
     }
 
-    public List<JokeDTO> getBoughtJokes() {
+    public List<JokeDTO> getBoughtJokes(String username) {
         log.debug("Request to get bought Jokes");
-        List<Joke> jokes = jokeRepository.findAll();  // todo -> we need user ID here
+        Long userId = userRepository.findByUsername(username).getUserId();
+        List<Long> boughtJokeIds = boughtJokeRepository.findJokeIdsByUserId(userId);
+        List<Joke> jokes = jokeRepository.findAllById(boughtJokeIds);
+        log.debug("Bought Jokes : {}", jokes);
+        return jokeMapper.toDTOList(jokes);
+    }
+
+    public List<JokeDTO> getSetups() {
+        log.debug("Request to get all Joke setups");
+        List<Joke> jokes = jokeRepository.findAll();
+        jokes.forEach(joke -> joke.setPunchline(null));
+        return jokeMapper.toDTOList(jokes);
+    }
+
+    public List<JokeDTO> getSetups(String username) {
+        log.debug("Request to get all Joke setups for {}", username);
+        Long userId = userRepository.findByUsername(username).getUserId();
+        List<Long> boughtJokeIds = boughtJokeRepository.findJokeIdsByUserId(userId);
+        List<Joke> jokes = jokeRepository.findAll();
+        jokes.removeIf(joke -> boughtJokeIds.contains(joke.getId()));
+        jokes.forEach(joke -> joke.setPunchline(null));
         return jokeMapper.toDTOList(jokes);
     }
 }
