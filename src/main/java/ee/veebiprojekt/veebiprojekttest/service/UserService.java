@@ -4,9 +4,11 @@ import ee.veebiprojekt.veebiprojekttest.dto.LoginDto;
 import ee.veebiprojekt.veebiprojekttest.dto.RegisterDTO;
 import ee.veebiprojekt.veebiprojekttest.dto.UserDTO;
 import ee.veebiprojekt.veebiprojekttest.entity.User;
+import ee.veebiprojekt.veebiprojekttest.entity.UserRole;
 import ee.veebiprojekt.veebiprojekttest.exception.FieldNotUniqueException;
 import ee.veebiprojekt.veebiprojekttest.mapper.UserMapper;
 import ee.veebiprojekt.veebiprojekttest.repository.UserRepository;
+import ee.veebiprojekt.veebiprojekttest.repository.UserRoleRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -23,12 +25,14 @@ import java.util.Map;
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
     private final Key jwtSecretKey = Keys.hmacShaKeyFor("Kui on meri hülgehall, ja sind ründamas suur hall".getBytes());
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -38,17 +42,22 @@ public class UserService {
             throw new IllegalArgumentException("UserDTO has null values");
         }
         if (userRepository.findByUsername(registerDTO.username()) != null) {
-            throw new FieldNotUniqueException(registerDTO.username());
+            throw new FieldNotUniqueException("username");
         }
         if (userRepository.findByEmail(registerDTO.email()) != null) {
-            throw new FieldNotUniqueException(registerDTO.email());
+            throw new FieldNotUniqueException("email");
         }
+
         UserDTO userDto = new UserDTO(
                 null, registerDTO.username(),
                 registerDTO.password(), registerDTO.email(), registerDTO.fullName());
         User user = userMapper.toEntity(userDto);
         user.setPasswordHash(passwordEncoder.encode(registerDTO.password()));
+
         userRepository.save(user);
+        UserRole userRole = new UserRole(user.getUserId(), 2L);
+        userRoleRepository.save(userRole);
+
         return userMapper.toDTO(user);
     }
 

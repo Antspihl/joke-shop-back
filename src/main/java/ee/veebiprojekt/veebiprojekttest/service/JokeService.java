@@ -17,6 +17,7 @@ public class JokeService {
     private final JokeRepository jokeRepository;
     private final JokeMapper jokeMapper;
     private final RatingRepository ratingRepository;
+    private static final String ENTITY_NAME = "joke";
 
     public JokeService(JokeRepository jokeRepository, JokeMapper jokeMapper, RatingRepository ratingRepository) {
         this.jokeRepository = jokeRepository;
@@ -35,7 +36,7 @@ public class JokeService {
     }
 
     public JokeDTO getJoke(long id) {
-        Joke joke = jokeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
+        Joke joke = jokeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NAME, id));
         return jokeMapper.toDTO(joke);
     }
 
@@ -44,7 +45,7 @@ public class JokeService {
     }
 
     public JokeDTO editJoke(long id, JokeDTO newJoke) {
-        Joke joke = jokeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
+        Joke joke = jokeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NAME, id));
         if (newJoke.setup() != null) joke.setSetup(newJoke.setup());
         if (newJoke.punchline() != null) joke.setPunchline(newJoke.punchline());
         if (newJoke.price() != null) joke.setPrice(newJoke.price());
@@ -54,7 +55,7 @@ public class JokeService {
     }
 
     public void recalculateJokeRating(long id) {
-        Joke joke = jokeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
+        Joke joke = jokeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NAME, id));
         List<Rating> ratings = ratingRepository.findAllByJokeId(id);
         double newRating = ratings.stream()
                 .mapToInt(Rating::getRatingValue)
@@ -69,7 +70,7 @@ public class JokeService {
     }
 
     public JokeDTO buyJoke(long id) {
-        Joke joke = jokeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
+        Joke joke = jokeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NAME, id));
         joke.setTimesBought(joke.getTimesBought() + 1);
         jokeRepository.save(joke);
         return jokeMapper.toDTO(joke);

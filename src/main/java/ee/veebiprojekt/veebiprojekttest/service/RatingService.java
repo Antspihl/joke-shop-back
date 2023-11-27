@@ -15,6 +15,7 @@ public class RatingService {
     private final RatingRepository ratingRepository;
     private final RatingMapper ratingMapper;
     private final JokeService jokeService;
+    private static final String RATING = "Rating";
 
     public RatingService(RatingRepository ratingRepository, RatingMapper ratingMapper, JokeService jokeService) {
         this.ratingRepository = ratingRepository;
@@ -24,10 +25,10 @@ public class RatingService {
 
     private Rating authRatingDto(RatingDTO ratingDTO) {
         if (ratingRepository.findById(ratingDTO.jokeId()).isEmpty()) {
-            throw new EntityNotFoundException(ratingDTO.jokeId());
+            throw new EntityNotFoundException("Joke", ratingDTO.jokeId());
         }
         if (ratingDTO.ratingValue() < 1 || ratingDTO.ratingValue() > 5) {
-            throw new InvalidValueException(ratingDTO.ratingValue());
+            throw new InvalidValueException(RATING, "value", ratingDTO.ratingValue());
         }
         Rating rating = new Rating();
         rating.setRatingValue(ratingDTO.ratingValue());
@@ -56,7 +57,7 @@ public class RatingService {
     }
 
     public RatingDTO editRating(RatingDTO ratingDTO, long id) {
-        Rating rating = ratingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
+        Rating rating = ratingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(RATING, id));
         if (ratingDTO.ratingValue() != null) rating.setRatingValue(ratingDTO.ratingValue());
         if (ratingDTO.jokeId() != null) rating.setJokeId(ratingDTO.jokeId());
         ratingRepository.save(rating);
@@ -65,7 +66,7 @@ public class RatingService {
     }
 
     public RatingDTO deleteRating(Long id) {
-        Rating rating = ratingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
+        Rating rating = ratingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(RATING, id));
         ratingRepository.deleteById(id);
         jokeService.recalculateJokeRating(rating.getJokeId());
         return ratingMapper.toDTO(rating);

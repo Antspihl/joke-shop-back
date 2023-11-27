@@ -32,7 +32,7 @@ public class CartService {
     }
 
     public CartDTO getCart(long id) {
-        Cart cart = cartRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
+        Cart cart = cartRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cart", id));
         return cartMapper.toDTO(cart);
     }
 

@@ -27,7 +27,7 @@ public class CartItemService {
     }
 
     public CartItemDTO getCartItem(long id) {
-        CartItem cartItem = cartItemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
+        CartItem cartItem = cartItemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("CartItem", id));
         return cartItemMapper.toDTO(cartItem);
     }
 
