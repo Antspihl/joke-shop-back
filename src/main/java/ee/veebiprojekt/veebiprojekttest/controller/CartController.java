@@ -22,13 +22,7 @@ public class CartController {
         return cartService.addCart(cartDTO);
     }
 
-    @GetMapping("/get/{id}")
-    public CartDTO getCart(@PathVariable long id) {
-        log.debug("REST request to get cart: {}", id);
-        return cartService.getCart(id);
-    }
-
-    @GetMapping("/get_items/{id}")
+    @GetMapping("/{id}")
     public List<CartItemDTO> getCartItems(@PathVariable long id) {
         log.debug("REST request to get cart items: {}", id);
         return cartService.getCartItems(id);
