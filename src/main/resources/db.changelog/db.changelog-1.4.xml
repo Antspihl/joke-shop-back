@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+    <changeSet id="drop_shop_carts_and_cart_items" author="Indrek">
+        <sql>
+            DROP TABLE IF EXISTS cart_items CASCADE;
+            DROP TABLE IF EXISTS shop_carts CASCADE;
+        </sql>
+    </changeSet>
+</databaseChangeLog>
