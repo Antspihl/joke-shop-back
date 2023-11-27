@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -68,5 +69,12 @@ public class JokeController {
         log.debug("REST request to get bought jokes");
         return jokeService.getBoughtJokes();
     }
+
+    @GetMapping("/random")
+    public String getRandomJoke() throws IOException {
+        log.debug("REST request to get random joke");
+        return jokeService.getRandomJoke();
+    }
+
 
 }
