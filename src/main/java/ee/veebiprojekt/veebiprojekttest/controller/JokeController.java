@@ -4,9 +4,11 @@ import ee.veebiprojekt.veebiprojekttest.dto.JokeDTO;
 import ee.veebiprojekt.veebiprojekttest.service.JokeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -77,4 +79,11 @@ public class JokeController {
         log.debug("REST request to get bought jokes");
         return jokeService.getBoughtJokes(principal.getName());
     }
+
+    @GetMapping("/random")
+    public JSONObject getRandomJoke() throws IOException {
+        log.debug("REST request to get random joke");
+        return jokeService.getRandomJoke();
+    }
 }
+

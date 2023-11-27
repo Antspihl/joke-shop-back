@@ -12,8 +12,10 @@ import ee.veebiprojekt.veebiprojekttest.repository.JokeRepository;
 import ee.veebiprojekt.veebiprojekttest.repository.RatingRepository;
 import ee.veebiprojekt.veebiprojekttest.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class JokeService {
     private final BoughtJokeRepository boughtJokeRepository;
     private static final String ENTITY_NAME = "joke";
 
-    public JokeService(JokeRepository jokeRepository, JokeMapper jokeMapper, RatingRepository ratingRepository, UserRepository userRepository, BoughtJokeRepository boughtJokeRepository) {
+    public JokeService(JokeRepository jokeRepository, JokeMapper jokeMapper, RatingRepository ratingRepository, UserRepository userRepository, BoughtJokeRepository boughtJokeRepository, JsonReader jsonReader) {
         this.jokeRepository = jokeRepository;
         this.jokeMapper = jokeMapper;
         this.ratingRepository = ratingRepository;
@@ -136,5 +138,16 @@ public class JokeService {
         jokes.removeIf(joke -> boughtJokeIds.contains(joke.getId()));
         jokes.forEach(joke -> joke.setPunchline(null));
         return jokeMapper.toDTOList(jokes);
+    }
+
+    public JSONObject getRandomJoke() throws IOException {
+        log.debug("Request to get random joke");
+//        URL url = new URL("https://v2.jokeapi.dev/joke/Any");
+//        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//        connection.setRequestMethod("GET");
+//        connection.setConnectTimeout(1500);
+//        connection.setReadTimeout(1500);
+        JSONObject response = JsonReader.readJsonFromUrl("https://v2.jokeapi.dev/joke/Any");
+        return response;
     }
 }
