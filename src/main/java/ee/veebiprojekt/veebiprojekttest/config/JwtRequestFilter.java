@@ -57,7 +57,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain chain) throws ServletException, IOException {
-
         Optional<String> jwt = getToken(request);
         if (jwt.isEmpty()) {
             chain.doFilter(request, response);
@@ -73,6 +72,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private UsernamePasswordAuthenticationToken buildAuthToken(Claims claims) {
         String username = claims.get("username", String.class);
+        log.debug("Building auth token for user " + username);
         return new UsernamePasswordAuthenticationToken(
                 username,
                 "",
@@ -83,11 +83,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private Set<SimpleGrantedAuthority> getAuth(String username) {
         Set<SimpleGrantedAuthority> auths = new HashSet<>();
         User user = userRepository.findByUsername(username);
-        log.debug("User with username " + username + " found.");
         if (user == null) {
             log.debug("User with username " + username + " not found.");
             return auths;
         }
+        log.debug("User with username " + username + " found.");
 
         Long userId = user.getUserId();
         UserRole userRole = userRoleRepository.getUserRoleByUserId(userId);
