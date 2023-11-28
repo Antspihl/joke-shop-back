@@ -25,4 +25,6 @@ public class Joke {
     private long timesBought;
     @Column(name = "rating")
     private double rating;
+    @Column(name = "created_by")
+    private double createdBy;
 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+    <changeSet id="alter_table_jokes" author="mattias">
+        <addColumn tableName="jokes">
+            <column name="created_by" type="INT" defaultValue="12"/>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="jokes" baseColumnNames="created_by"
+                                 constraintName="fk_user_id" referencedTableName="users"
+                                 referencedColumnNames="user_id"/>
+    </changeSet>
+</databaseChangeLog>

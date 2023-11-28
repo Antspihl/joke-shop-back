@@ -35,11 +35,13 @@ public class JokeService {
         this.boughtJokeRepository = boughtJokeRepository;
     }
 
-    public JokeDTO addJoke(JokeDTO jokeDTO) {
+    public JokeDTO addJoke(JokeDTO jokeDTO, String username) {
         log.debug("Request to save Joke : {}", jokeDTO);
+        User user = userRepository.findByUsername(username);
         Joke joke = new Joke();
         joke.setSetup(jokeDTO.setup());
         joke.setPunchline(jokeDTO.punchline());
+        joke.setCreatedBy(user.getUserId());
         if (jokeDTO.price() != null) joke.setPrice(jokeDTO.price());
         if (jokeDTO.timesBought() != null) joke.setTimesBought(jokeDTO.timesBought());
         jokeRepository.save(joke);

@@ -18,9 +18,9 @@ public class JokeController {
     private final JokeService jokeService;
 
     @PostMapping("/add")
-    public JokeDTO addJoke(@RequestBody JokeDTO jokeDTO) {
+    public JokeDTO addJoke(@RequestBody JokeDTO jokeDTO, Principal principal) {
         log.debug("REST request to add joke: {}", jokeDTO);
-        return jokeService.addJoke(jokeDTO);
+        return jokeService.addJoke(jokeDTO, principal.getName());
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
