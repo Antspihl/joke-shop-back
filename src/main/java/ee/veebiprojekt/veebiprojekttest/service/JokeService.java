@@ -103,6 +103,19 @@ public class JokeService {
     public List<JokeDTO> getTop3() {
         log.debug("Request to get top 3 Jokes");
         List<Joke> jokes = jokeRepository.findAllByOrderByTimesBoughtDesc();
+        return getGetAndShuffleJokes(jokes);
+    }
+
+    public List<JokeDTO> getTop3(String username) {
+        log.debug("Request to get top 3 Jokes");
+        User user = userRepository.findByUsername(username);
+        List<Joke> jokes = jokeRepository.findAllByOrderByTimesBoughtDesc();
+        List<Long> boughtJokeIds = boughtJokeRepository.findJokeIdsByUserId(user.getUserId());
+        jokes.removeIf(joke -> boughtJokeIds.contains(joke.getId()));
+        return getGetAndShuffleJokes(jokes);
+    }
+
+    private List<JokeDTO> getGetAndShuffleJokes(List<Joke> jokes) {
         if (jokes.stream().allMatch(joke -> joke.getTimesBought() == 0)) {
             Collections.shuffle(jokes);
         }

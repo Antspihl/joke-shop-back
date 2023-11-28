@@ -59,17 +59,15 @@ public class JokeController {
 
     @GetMapping("/setups")
     public List<JokeDTO> getSetups(Principal principal) {
-        if (principal == null) {
-            return jokeService.getSetups();
-        } else {
-            return jokeService.getSetups(principal.getName());
-        }
+        if (principal == null) return jokeService.getSetups();
+        else return jokeService.getSetups(principal.getName());
     }
 
     @GetMapping("/top3")
-    public List<JokeDTO> getTop3() {
+    public List<JokeDTO> getTop3(Principal principal) {
         log.debug("REST request to get top 3 jokes");
-        return jokeService.getTop3();
+        if (principal == null) return jokeService.getTop3();
+        else return jokeService.getTop3(principal.getName());
     }
 
     @GetMapping("/bought")
