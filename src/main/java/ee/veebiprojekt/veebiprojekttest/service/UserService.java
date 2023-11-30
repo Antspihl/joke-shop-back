@@ -67,8 +67,12 @@ public class UserService {
         return userMapper.toDTO(user);
     }
 
-    public UserDTO getUserInfo(String username) {
+    public UserDTO getUserInfo(String username, String requester) {
         log.debug("Getting user info for user: {}", username);
+        if (!username.equals(requester)) {
+            log.debug("User {} is not authorized to get info for user {}", requester, username);
+            throw new IllegalArgumentException("User is not authorized to get info for this user");
+        }
         User user = userRepository.findByUsername(username);
         user.setPasswordHash(null);
         return userMapper.toDTO(user);
@@ -95,10 +99,8 @@ public class UserService {
             log.debug("Incorrect password");
             throw new IllegalArgumentException("Incorrect password");
         }
-        Long id = user.getUserId();
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", username);
-        claims.put("userId", id);
         String jwt = Jwts.builder()
                 .setSubject("naljapood")
                 .addClaims(claims)

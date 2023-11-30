@@ -41,6 +41,7 @@ public class SecurityConfiguration {
                             .requestMatchers("/api/jokes/get/**").hasAnyAuthority(USER, ADMIN)
                             .requestMatchers("/api/jokes/all").hasAuthority(ADMIN)
                             .requestMatchers("/api/jokes/buy/**").hasAnyAuthority(USER, ADMIN)
+                            .requestMatchers("/api/jokes/bought").hasAnyAuthority(USER, ADMIN)
                             .requestMatchers("/api/jokes/").authenticated()
                             .requestMatchers("/api/jokes/setups").permitAll()
                             .requestMatchers("/api/jokes/top3").permitAll()

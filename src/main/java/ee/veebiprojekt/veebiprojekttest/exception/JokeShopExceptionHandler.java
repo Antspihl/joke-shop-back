@@ -61,6 +61,14 @@ public class JokeShopExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(e.getMessage());
     }
 
+    @ExceptionHandler(WrongOwnerException.class)
+    public ResponseEntity<Object> handleUserException(WrongOwnerException e) {
+        log.debug("Wrong owner exception: {}", e.getMessage());
+        return ResponseEntity
+                .badRequest()
+                .body(e.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleUserException(Exception e) {
         log.error("Server exception: {}", e.getMessage());
