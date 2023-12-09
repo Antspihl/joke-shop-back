@@ -2,6 +2,8 @@ package ee.veebiprojekt.veebiprojekttest.controller;
 
 import ee.veebiprojekt.veebiprojekttest.dto.JokeDTO;
 import ee.veebiprojekt.veebiprojekttest.entity.Joke;
+import ee.veebiprojekt.veebiprojekttest.exception.EntityNotFoundException;
+import ee.veebiprojekt.veebiprojekttest.exception.JokeShopExceptionHandler;
 import ee.veebiprojekt.veebiprojekttest.mock.dto.JokeDTOMock;
 import ee.veebiprojekt.veebiprojekttest.mock.entity.JokeMock;
 import ee.veebiprojekt.veebiprojekttest.repository.BoughtJokeRepository;
@@ -23,6 +25,8 @@ import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
@@ -31,6 +35,9 @@ class JokeControllerTests {
 
     @MockBean
     private JokeService jokeService;
+
+    @MockBean
+    private JokeShopExceptionHandler jokeShopExceptionHandler;
 
     @Mock
     private JokeRepository jokeRepository;
@@ -254,20 +261,22 @@ class JokeControllerTests {
 
     @Test
     void testGetJokeThrowNotFound() {
-        when(jokeService.getJoke(1L)).thenReturn(testJokeDTO);
+        when(jokeService.getJoke(1L))
+                .thenThrow(new EntityNotFoundException("Joke", 1L));
         when(jokeRepository.findById(1L)).thenReturn(Optional.empty());
 
         given()
                 .header("Authorization", "Bearer " + jwtToken)
                 .when()
-                .get("/api/jokes/get/1")
-                .then()
-                .statusCode(HttpStatus.BAD_REQUEST.value());
+                .get("/api/jokes/get/1");
+
+        verify(jokeShopExceptionHandler).handleUserException(any(EntityNotFoundException.class));
     }
 
     @Test
     void testEditJokeThrowNotFound() {
-        when(jokeService.editJoke(1L, editedJokeDTO)).thenReturn(editedJokeDTO);
+        when(jokeService.editJoke(1L, editedJokeDTO))
+                .thenThrow(new EntityNotFoundException("Joke", 1L));
         when(jokeRepository.findById(1L)).thenReturn(Optional.empty());
 
         given()
@@ -275,21 +284,23 @@ class JokeControllerTests {
                 .when()
                 .contentType("application/json")
                 .body(editedJokeDTO)
-                .put("/api/jokes/1")
-                .then()
-                .statusCode(HttpStatus.BAD_REQUEST.value());
+                .put("/api/jokes/1");
+
+        verify(jokeShopExceptionHandler).handleUserException(any(EntityNotFoundException.class));
     }
 
     @Test
     void testBuyJokeThrowNotFound() {
-        when(jokeService.buyJoke(1L, "user")).thenReturn(null);
+        when(jokeService.buyJoke(1L, "user"))
+                .thenThrow(new EntityNotFoundException("Joke", 1L));
         when(jokeRepository.findById(1L)).thenReturn(Optional.empty());
+
         given()
                 .header("Authorization", "Bearer " + jwtToken)
                 .when()
-                .get("/api/jokes/buy/1")
-                .then()
-                .statusCode(HttpStatus.BAD_REQUEST.value());
+                .get("/api/jokes/buy/1");
+
+        verify(jokeShopExceptionHandler).handleUserException(any(EntityNotFoundException.class));
     }
 
 }
