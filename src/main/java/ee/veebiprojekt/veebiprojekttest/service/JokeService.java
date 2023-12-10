@@ -121,7 +121,7 @@ public class JokeService {
         if (jokes.stream().allMatch(joke -> joke.getTimesBought() == 0)) {
             Collections.shuffle(jokes);
         }
-        jokes = jokes.subList(0, 3);
+        if (jokes.size() > 3) jokes = jokes.subList(0, 3);
         jokes.forEach(joke -> joke.setPunchline(null));
         log.debug("Top 3 Jokes : {}", jokes);
         return jokeMapper.toDTOList(jokes);

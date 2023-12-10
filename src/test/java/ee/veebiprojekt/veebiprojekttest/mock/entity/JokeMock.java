@@ -11,4 +11,12 @@ public class JokeMock {
                 punchline("Mock Joke Punchline").
                 build();
     }
+
+    public static Joke shallowEditedJoke(Long id){
+        return Joke.builder().
+                id(id).
+                setup("Mock Joke edited").
+                punchline("Mock Joke Punchline edited").
+                build();
+    }
 }

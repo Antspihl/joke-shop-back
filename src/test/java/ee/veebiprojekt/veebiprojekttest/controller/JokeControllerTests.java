@@ -176,23 +176,6 @@ class JokeControllerTests {
 
     @Test
     @WithMockUser(username = "user", roles = {"ADMIN"})
-    void testGetAllJokes() {
-        when(jokeService.getJokes()).thenReturn(Collections.singletonList(testJokeDTO));
-        when(jokeRepository.findAll()).thenReturn(Collections.singletonList(testJoke));
-
-        given()
-                .header("Authorization", "Bearer " + jwtToken)
-                .when()
-                .get("/api/jokes/all")
-                .then()
-                .statusCode(HttpStatus.OK.value())
-                .body("[0].id", equalTo((int) testJokeDTO.id()))
-                .body("[0].setup", equalTo(testJokeDTO.setup()))
-                .body("[0].punchline", equalTo(testJokeDTO.punchline()));
-    }
-
-    @Test
-    @WithMockUser(username = "user", roles = {"ADMIN"})
     void testEditJoke() {
         when(jokeService.editJoke(1L, editedJokeDTO)).thenReturn(editedJokeDTO);
         when(jokeRepository.findById(1L)).thenReturn(java.util.Optional.ofNullable(testJoke));

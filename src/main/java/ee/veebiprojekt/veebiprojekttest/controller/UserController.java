@@ -19,7 +19,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/username/{username}")
+    @GetMapping("/{username}")
     public UserDTO getUser(@PathVariable String username, Principal principal) {
         log.debug("REST request to get user: {}", username);
         return userService.getUserInfo(username, principal.getName());
