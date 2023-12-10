@@ -1,6 +1,6 @@
 package ee.veebiprojekt.veebiprojekttest.service;
 
-import ee.veebiprojekt.veebiprojekttest.dto.LoginDto;
+import ee.veebiprojekt.veebiprojekttest.dto.LoginDTO;
 import ee.veebiprojekt.veebiprojekttest.dto.RegisterDTO;
 import ee.veebiprojekt.veebiprojekttest.dto.UserDTO;
 import ee.veebiprojekt.veebiprojekttest.entity.User;
@@ -85,7 +85,7 @@ public class UserService {
         return userMapper.toDTOList(users);
     }
 
-    public String login(LoginDto loginDto) {
+    public String login(LoginDTO loginDto) {
         log.debug("Logging in user: {}", loginDto.username());
         String username = loginDto.username();
         String password = loginDto.password();

@@ -1,13 +1,15 @@
 package ee.veebiprojekt.veebiprojekttest.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Table(name = "jokes")
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 public class Joke {
@@ -20,6 +22,7 @@ public class Joke {
     @Column(name = "punchline")
     private String punchline;
     @Column(name = "price")
+    @Builder.Default
     private BigDecimal price = BigDecimal.ONE;
     @Column(name = "times_bought")
     private long timesBought;
