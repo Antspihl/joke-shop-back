@@ -3,6 +3,7 @@ package ee.veebiprojekt.veebiprojekttest.service;
 import ee.veebiprojekt.veebiprojekttest.dto.LoginDTO;
 import ee.veebiprojekt.veebiprojekttest.dto.RegisterDTO;
 import ee.veebiprojekt.veebiprojekttest.dto.UserDTO;
+import ee.veebiprojekt.veebiprojekttest.dto.UserSearchDTO;
 import ee.veebiprojekt.veebiprojekttest.entity.User;
 import ee.veebiprojekt.veebiprojekttest.entity.UserRole;
 import ee.veebiprojekt.veebiprojekttest.exception.FieldNotUniqueException;
@@ -10,6 +11,7 @@ import ee.veebiprojekt.veebiprojekttest.mapper.UserMapper;
 import ee.veebiprojekt.veebiprojekttest.mock.dto.LoginDTOMock;
 import ee.veebiprojekt.veebiprojekttest.mock.dto.RegisterDTOMock;
 import ee.veebiprojekt.veebiprojekttest.mock.dto.UserDTOMock;
+import ee.veebiprojekt.veebiprojekttest.mock.dto.UserSearchDTOMock;
 import ee.veebiprojekt.veebiprojekttest.mock.entity.UserMock;
 import ee.veebiprojekt.veebiprojekttest.mock.entity.UserRoleMock;
 import ee.veebiprojekt.veebiprojekttest.repository.UserRepository;
@@ -17,12 +19,14 @@ import ee.veebiprojekt.veebiprojekttest.repository.UserRoleRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -55,6 +59,10 @@ class UserServiceTests {
     private static RegisterDTO testRegisterDTO;
     private static RegisterDTO testIllegalRegisterDTO;
     private static UserRole testUserRole;
+    private static UserSearchDTO testUserSearchDTO;
+    private static Page testPage;
+    private static List<User> testUserList;
+    private static List<UserDTO> testUserDTOList;
 
     @BeforeAll
     static void setUp() {
@@ -64,6 +72,10 @@ class UserServiceTests {
         testRegisterDTO = RegisterDTOMock.shallowRegisterDTO();
         testIllegalRegisterDTO = RegisterDTOMock.illegalRegisterDTO();
         testUserRole = UserRoleMock.getUserRole(1L);
+        testUserSearchDTO = UserSearchDTOMock.mockUserSearchDTO("username", "email", "fullName", 1L);
+        testPage = Mockito.mock(Page.class);
+        testUserList = List.of(testUser);
+        testUserDTOList = List.of(testUserDTO);
     }
 
     @Test
@@ -134,7 +146,6 @@ class UserServiceTests {
         verify(userRepository, times(1)).findByUsername(any());
     }
 
-
     @Test
     void testGetUserInfoSuccess() {
         when(userRepository.findByUsername(any())).thenReturn(testUser);
@@ -150,4 +161,15 @@ class UserServiceTests {
         assertThrows(IllegalArgumentException.class, () -> userService.getUserInfo("AuthorizedUserName", "NOTAuthorizedUserName"));
     }
 
+    @Test
+    void testGetUsersPaginatedSuccess() {
+        when(userRepository.findAll(Mockito.<Specification<User>>any(), any(Pageable.class))).thenReturn(testPage);
+        when(testPage.getContent()).thenReturn(testUserList);
+        when(userMapper.toDTOList(any())).thenReturn(testUserDTOList);
+
+        userService.getUsersPaginated(testUserSearchDTO);
+
+        verify(userRepository, times(1)).findAll(Mockito.<Specification<User>>any(), any(Pageable.class)
+        );
+    }
 }

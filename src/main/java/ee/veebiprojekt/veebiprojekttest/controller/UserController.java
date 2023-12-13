@@ -1,13 +1,11 @@
 package ee.veebiprojekt.veebiprojekttest.controller;
 
 import ee.veebiprojekt.veebiprojekttest.dto.UserDTO;
+import ee.veebiprojekt.veebiprojekttest.dto.UserSearchDTO;
 import ee.veebiprojekt.veebiprojekttest.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -29,5 +27,12 @@ public class UserController {
     public List<UserDTO> getUsers() {
         log.debug("REST request to get all users");
         return userService.getUsers();
+    }
+
+
+    @GetMapping(produces = {"application/json"}, consumes = {"application/json"})
+    public List<UserDTO> getUsersPage(@RequestBody UserSearchDTO userSearchDTO) {
+        log.debug("REST request to get all users");
+        return userService.getUsersPaginated(userSearchDTO);
     }
 }
