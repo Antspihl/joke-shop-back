@@ -3,6 +3,7 @@ package ee.veebiprojekt.veebiprojekttest.service;
 import ee.veebiprojekt.veebiprojekttest.dto.LoginDTO;
 import ee.veebiprojekt.veebiprojekttest.dto.RegisterDTO;
 import ee.veebiprojekt.veebiprojekttest.dto.UserDTO;
+import ee.veebiprojekt.veebiprojekttest.dto.UserSearchDTO;
 import ee.veebiprojekt.veebiprojekttest.entity.User;
 import ee.veebiprojekt.veebiprojekttest.entity.UserRole;
 import ee.veebiprojekt.veebiprojekttest.exception.FieldNotUniqueException;
@@ -110,5 +111,13 @@ public class UserService {
                 .compact();
         log.debug("Logged in user: {}", username);
         return jwt;
+    }
+
+    public List<UserDTO> getUsersPaginated(UserSearchDTO userSearchDTO) {
+        log.debug("Getting all users");
+        userSearchDTO.getSpecification();
+        List<User> users = userRepository.findAll(userSearchDTO.getSpecification(), userSearchDTO.getPageable()).getContent();
+        users.forEach(user -> user.setPasswordHash(null));
+        return userMapper.toDTOList(users);
     }
 }
