@@ -40,27 +40,26 @@ public class SecurityConfiguration {
                     .cors(cors -> cors
                             .configurationSource(request -> {
                                 CorsConfiguration configuration = new CorsConfiguration();
-                                configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000/api", "http://193.40.156.35:8081/api"));
+                                configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://193.40.156.35:8081"));
                                 configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
                                 configuration.setAllowCredentials(true);
                                 configuration.setAllowedHeaders(List.of("*"));
-                                // Set other CORS configurations as needed
                                 return configuration;
                             })
                     )
 
                     .authorizeHttpRequests(authorize -> authorize
-                            .requestMatchers("/carts/**").hasAnyAuthority(ADMIN, USER)
-                            .requestMatchers("/cart_items/**").hasAnyAuthority(ADMIN, USER)
-                            .requestMatchers("/ratings/**").hasAnyAuthority(ADMIN, USER)
-                            .requestMatchers("/jokes/add").hasAnyAuthority(ADMIN, USER)
-                            .requestMatchers("/jokes/get/**").hasAnyAuthority(USER, ADMIN)
-                            .requestMatchers("/jokes/all").hasAuthority(ADMIN)
-                            .requestMatchers("/jokes/buy/**").hasAnyAuthority(USER, ADMIN)
-                            .requestMatchers("/jokes/bought").hasAnyAuthority(USER, ADMIN)
-                            .requestMatchers("/jokes/").authenticated()
-                            .requestMatchers("/jokes/setups").permitAll()
-                            .requestMatchers("/jokes/top3").permitAll()
+                            .requestMatchers("/api/carts/**").hasAnyAuthority(ADMIN, USER)
+                            .requestMatchers("/api/cart_items/**").hasAnyAuthority(ADMIN, USER)
+                            .requestMatchers("/api/ratings/**").hasAnyAuthority(ADMIN, USER)
+                            .requestMatchers("/api/jokes/add").hasAnyAuthority(ADMIN, USER)
+                            .requestMatchers("/api/jokes/get/**").hasAnyAuthority(USER, ADMIN)
+                            .requestMatchers("/api/jokes/all").hasAuthority(ADMIN)
+                            .requestMatchers("/api/jokes/buy/**").hasAnyAuthority(USER, ADMIN)
+                            .requestMatchers("/api/jokes/bought").hasAnyAuthority(USER, ADMIN)
+                            .requestMatchers("/api/jokes/").authenticated()
+                            .requestMatchers("/api/jokes/setups").permitAll()
+                            .requestMatchers("/api/jokes/top3").permitAll()
                             .anyRequest().permitAll()
                     )
                     .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
