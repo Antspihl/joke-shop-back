@@ -151,14 +151,9 @@ class UserServiceTests {
         when(userRepository.findByUsername(any())).thenReturn(testUser);
         when(userMapper.toDTO(any())).thenReturn(testUserDTO);
 
-        userService.getUserInfo(testUser.getUsername(), testUser.getUsername());
+        userService.getUserInfo(testUser.getUsername());
 
         verify(userRepository, times(1)).findByUsername(any());
-    }
-
-    @Test
-    void testGetUserInfoFailUserNotAuthorized() {
-        assertThrows(IllegalArgumentException.class, () -> userService.getUserInfo("AuthorizedUserName", "NOTAuthorizedUserName"));
     }
 
     @Test
