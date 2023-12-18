@@ -12,4 +12,10 @@ import java.util.List;
 public interface RatingRepository extends JpaRepository<Rating, Long> {
     @Query("SELECT e FROM Rating e WHERE e.jokeId = :jokeId")
     List<Rating> findAllByJokeId(@Param("jokeId") long id);
+
+    @Query("SELECT e FROM Rating e WHERE e.authorId = :userId")
+    List<Rating> findAllByAuthorId(Long userId);
+
+    @Query("SELECT e FROM Rating e WHERE e.jokeId = :jokeId AND e.authorId = :authorId")
+    Rating getJokeRating(long jokeId, long authorId);
 }

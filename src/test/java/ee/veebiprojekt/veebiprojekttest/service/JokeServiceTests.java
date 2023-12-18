@@ -167,7 +167,6 @@ class JokeServiceTests {
 
     @Test
     void testGetBoughtJokesSuccess() {
-        when(jokeMapper.toDTOList(anyList())).thenReturn(jokeDTOList);
         when(userRepository.findByUsername(username)).thenReturn(testUser);
         when(boughtJokeRepository.findJokeIdsByUserId(testUser.getUserId())).thenReturn(jokeIdList);
 
