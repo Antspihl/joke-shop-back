@@ -1,9 +1,6 @@
 package ee.veebiprojekt.veebiprojekttest.service;
 
-import ee.veebiprojekt.veebiprojekttest.dto.LoginDTO;
-import ee.veebiprojekt.veebiprojekttest.dto.RegisterDTO;
-import ee.veebiprojekt.veebiprojekttest.dto.UserDTO;
-import ee.veebiprojekt.veebiprojekttest.dto.UserSearchDTO;
+import ee.veebiprojekt.veebiprojekttest.dto.*;
 import ee.veebiprojekt.veebiprojekttest.entity.User;
 import ee.veebiprojekt.veebiprojekttest.entity.UserRole;
 import ee.veebiprojekt.veebiprojekttest.exception.FieldNotUniqueException;
@@ -57,7 +54,7 @@ public class UserService {
 
         UserDTO userDto = new UserDTO(
                 null, registerDTO.username(),
-                registerDTO.password(), registerDTO.email(), registerDTO.fullName());
+                registerDTO.password(), registerDTO.email(), false, registerDTO.fullName());
         User user = userMapper.toEntity(userDto);
         user.setPasswordHash(passwordEncoder.encode(registerDTO.password()));
 
@@ -68,12 +65,8 @@ public class UserService {
         return userMapper.toDTO(user);
     }
 
-    public UserDTO getUserInfo(String username, String requester) {
+    public UserDTO getUserInfo(String username) {
         log.debug("Getting user info for user: {}", username);
-        if (!username.equals(requester)) {
-            log.debug("User {} is not authorized to get info for user {}", requester, username);
-            throw new IllegalArgumentException("User is not authorized to get info for this user");
-        }
         User user = userRepository.findByUsername(username);
         user.setPasswordHash(null);
         return userMapper.toDTO(user);
@@ -119,5 +112,20 @@ public class UserService {
         List<User> users = userRepository.findAll(userSearchDTO.getSpecification(), userSearchDTO.getPageable()).getContent();
         users.forEach(user -> user.setPasswordHash(null));
         return userMapper.toDTOList(users);
+    }
+
+    public UsersPageResponseDto getUserPageResponse(UserSearchDTO userSearchDTO) {
+        List<UserDTO> userList = getUsersPaginated(userSearchDTO);
+        return UsersPageResponseDto.builder()
+                .pageUsers(userList)
+                .totalUsersCount(userRepository.count())
+                .build();
+    }
+
+    public void deleteUser(Long userId) {
+        log.debug("Deleting user: {}", userId);
+        UserRole userRole = userRoleRepository.getUserRoleByUserId(userId);
+        userRoleRepository.delete(userRole);
+        userRepository.deleteById(userId);
     }
 }
