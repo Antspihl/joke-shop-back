@@ -10,6 +10,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
@@ -33,6 +37,17 @@ public class SecurityConfiguration {
                     .sessionManagement(sessionManagement -> sessionManagement
                             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     )
+                    .cors(cors -> cors
+                            .configurationSource(request -> {
+                                CorsConfiguration configuration = new CorsConfiguration();
+                                configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://193.40.156.35:8081"));
+                                configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+                                configuration.setAllowCredentials(true);
+                                configuration.setAllowedHeaders(List.of("*"));
+                                return configuration;
+                            })
+                    )
+
                     .authorizeHttpRequests(authorize -> authorize
                             .requestMatchers("/api/carts/**").hasAnyAuthority(ADMIN, USER)
                             .requestMatchers("/api/cart_items/**").hasAnyAuthority(ADMIN, USER)
@@ -41,6 +56,7 @@ public class SecurityConfiguration {
                             .requestMatchers("/api/jokes/get/**").hasAnyAuthority(USER, ADMIN)
                             .requestMatchers("/api/jokes/all").hasAuthority(ADMIN)
                             .requestMatchers("/api/jokes/buy/**").hasAnyAuthority(USER, ADMIN)
+                            .requestMatchers("/api/jokes/bought").hasAnyAuthority(USER, ADMIN)
                             .requestMatchers("/api/jokes/").authenticated()
                             .requestMatchers("/api/jokes/setups").permitAll()
                             .requestMatchers("/api/jokes/top3").permitAll()

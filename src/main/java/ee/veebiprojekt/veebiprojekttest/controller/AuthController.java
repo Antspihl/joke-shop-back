@@ -1,6 +1,6 @@
 package ee.veebiprojekt.veebiprojekttest.controller;
 
-import ee.veebiprojekt.veebiprojekttest.dto.LoginDto;
+import ee.veebiprojekt.veebiprojekttest.dto.LoginDTO;
 import ee.veebiprojekt.veebiprojekttest.dto.RegisterDTO;
 import ee.veebiprojekt.veebiprojekttest.dto.UserDTO;
 import ee.veebiprojekt.veebiprojekttest.service.UserService;
@@ -26,7 +26,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginDto loginDto) {
+    public String login(@RequestBody LoginDTO loginDto) {
         log.debug("REST request to login user: {}", loginDto);
         return userService.login(loginDto);
     }

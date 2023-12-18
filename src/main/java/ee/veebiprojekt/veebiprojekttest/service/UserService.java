@@ -1,8 +1,6 @@
 package ee.veebiprojekt.veebiprojekttest.service;
 
-import ee.veebiprojekt.veebiprojekttest.dto.LoginDto;
-import ee.veebiprojekt.veebiprojekttest.dto.RegisterDTO;
-import ee.veebiprojekt.veebiprojekttest.dto.UserDTO;
+import ee.veebiprojekt.veebiprojekttest.dto.*;
 import ee.veebiprojekt.veebiprojekttest.entity.User;
 import ee.veebiprojekt.veebiprojekttest.entity.UserRole;
 import ee.veebiprojekt.veebiprojekttest.exception.FieldNotUniqueException;
@@ -24,18 +22,21 @@ import java.util.Map;
 
 @Service
 @Slf4j
+
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RatingService ratingService;
     private final Key jwtSecretKey = Keys.hmacShaKeyFor("Kui on meri hülgehall, ja sind ründamas suur hall".getBytes());
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder, RatingService ratingService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.ratingService = ratingService;
     }
 
     public UserDTO register(RegisterDTO registerDTO) {
@@ -56,7 +57,7 @@ public class UserService {
 
         UserDTO userDto = new UserDTO(
                 null, registerDTO.username(),
-                registerDTO.password(), registerDTO.email(), registerDTO.fullName());
+                registerDTO.password(), registerDTO.email(), false, registerDTO.fullName());
         User user = userMapper.toEntity(userDto);
         user.setPasswordHash(passwordEncoder.encode(registerDTO.password()));
 
@@ -81,7 +82,7 @@ public class UserService {
         return userMapper.toDTOList(users);
     }
 
-    public String login(LoginDto loginDto) {
+    public String login(LoginDTO loginDto) {
         log.debug("Logging in user: {}", loginDto.username());
         String username = loginDto.username();
         String password = loginDto.password();
@@ -95,10 +96,8 @@ public class UserService {
             log.debug("Incorrect password");
             throw new IllegalArgumentException("Incorrect password");
         }
-        Long id = user.getUserId();
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", username);
-        claims.put("userId", id);
         String jwt = Jwts.builder()
                 .setSubject("naljapood")
                 .addClaims(claims)
@@ -108,5 +107,29 @@ public class UserService {
                 .compact();
         log.debug("Logged in user: {}", username);
         return jwt;
+    }
+
+    public List<UserDTO> getUsersPaginated(UserSearchDTO userSearchDTO) {
+        log.debug("Getting all users");
+        userSearchDTO.getSpecification();
+        List<User> users = userRepository.findAll(userSearchDTO.getSpecification(), userSearchDTO.getPageable()).getContent();
+        users.forEach(user -> user.setPasswordHash(null));
+        return userMapper.toDTOList(users);
+    }
+
+    public UsersPageResponseDto getUserPageResponse(UserSearchDTO userSearchDTO) {
+        List<UserDTO> userList = getUsersPaginated(userSearchDTO);
+        return UsersPageResponseDto.builder()
+                .pageUsers(userList)
+                .totalUsersCount(userRepository.count())
+                .build();
+    }
+
+    public void deleteUser(Long userId) {
+        log.debug("Deleting user: {}", userId);
+        UserRole userRole = userRoleRepository.getUserRoleByUserId(userId);
+        ratingService.deleteAllRatingFromUser(userId);
+        userRoleRepository.delete(userRole);
+        userRepository.deleteById(userId);
     }
 }

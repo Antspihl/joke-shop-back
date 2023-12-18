@@ -1,7 +1,7 @@
 # lyhike-nimi-back
 
 ## Database diagram
-![img.png](database_diagram.png)
+![img.png](database.png)
 
 ## Features
 

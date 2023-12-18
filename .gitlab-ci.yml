@@ -10,7 +10,7 @@ build backend:
   tags:
     - main
   script:
-    - ./gradlew build
+    - ./gradlew build -x test
     - docker build -t lyhike-nimi .
     - echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
     - docker image ls

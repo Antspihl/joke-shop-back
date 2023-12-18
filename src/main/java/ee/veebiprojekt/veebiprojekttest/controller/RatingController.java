@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -17,9 +18,9 @@ public class RatingController {
     private final RatingService ratingService;
 
     @PostMapping
-    public RatingDTO addRating(@RequestBody RatingDTO ratingDTO) {
+    public RatingDTO addRating(@RequestBody RatingDTO ratingDTO, Principal principal) {
         log.debug("REST request to add rating: {}", ratingDTO);
-        return ratingService.addRating(ratingDTO);
+        return ratingService.addRating(ratingDTO, principal.getName());
     }
 
     @GetMapping("/{jokeId}")
@@ -35,14 +36,14 @@ public class RatingController {
     }
 
     @PutMapping("/{id}")
-    public RatingDTO editRating(@RequestBody RatingDTO ratingDTO, @PathVariable Long id) {
+    public RatingDTO editRating(@RequestBody RatingDTO ratingDTO, @PathVariable Long id, Principal principal) {
         log.debug("REST request to edit rating: {}", id);
-        return ratingService.editRating(ratingDTO, id);
+        return ratingService.editRating(ratingDTO, id, principal.getName());
     }
 
     @DeleteMapping("/{id}")
-    public RatingDTO deleteRating(@PathVariable Long id) {
+    public RatingDTO deleteRating(@PathVariable Long id, Principal principal) {
         log.debug("REST request to delete rating: {}", id);
-        return ratingService.deleteRating(id);
+        return ratingService.deleteRating(id, principal.getName());
     }
 }
