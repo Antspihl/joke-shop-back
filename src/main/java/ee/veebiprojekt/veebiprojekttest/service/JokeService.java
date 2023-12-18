@@ -135,14 +135,17 @@ public class JokeService {
         List<Joke> jokes = jokeRepository.findAllById(boughtJokeIds);
         List<JokeDTO> jokeDTOs = new ArrayList<>();
         for (Joke joke : jokes) {
-            double rating = ratingRepository.getJokeRating(joke.getId(), userId).getRatingValue();
+            Rating rating = ratingRepository.getJokeRating(joke.getId(), userId);
+            double ratingValue;
+            if (rating == null) ratingValue = 0.0;
+            else ratingValue = rating.getRatingValue();
             jokeDTOs.add(new JokeDTO(
                     joke.getId(),
                     joke.getSetup(),
                     joke.getPunchline(),
                     joke.getPrice(),
                     joke.getTimesBought(),
-                    rating,
+                    ratingValue,
                     joke.getCreatedBy()));
         }
 
