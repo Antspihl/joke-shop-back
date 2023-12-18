@@ -82,6 +82,4 @@ public class JokeController {
         log.debug("REST request to get random joke");
         return jokeService.getRandomJoke();
     }
-
-
 }
