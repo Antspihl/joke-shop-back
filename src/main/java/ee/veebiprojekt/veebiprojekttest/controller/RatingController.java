@@ -35,12 +35,6 @@ public class RatingController {
         return ratingService.getRatings();
     }
 
-    @PutMapping("/{id}")
-    public RatingDTO editRating(@RequestBody RatingDTO ratingDTO, @PathVariable Long id, Principal principal) {
-        log.debug("REST request to edit rating: {}", id);
-        return ratingService.editRating(ratingDTO, id, principal.getName());
-    }
-
     @DeleteMapping("/{id}")
     public RatingDTO deleteRating(@PathVariable Long id, Principal principal) {
         log.debug("REST request to delete rating: {}", id);

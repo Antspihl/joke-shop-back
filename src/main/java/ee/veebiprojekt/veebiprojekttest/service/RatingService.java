@@ -4,7 +4,6 @@ import ee.veebiprojekt.veebiprojekttest.dto.RatingDTO;
 import ee.veebiprojekt.veebiprojekttest.entity.Rating;
 import ee.veebiprojekt.veebiprojekttest.entity.User;
 import ee.veebiprojekt.veebiprojekttest.exception.EntityNotFoundException;
-import ee.veebiprojekt.veebiprojekttest.exception.InvalidValueException;
 import ee.veebiprojekt.veebiprojekttest.exception.WrongOwnerException;
 import ee.veebiprojekt.veebiprojekttest.mapper.RatingMapper;
 import ee.veebiprojekt.veebiprojekttest.repository.RatingRepository;
@@ -30,28 +29,18 @@ public class RatingService {
         this.userRepository = userRepository;
     }
 
-    private Rating authRatingDto(RatingDTO ratingDTO) {
-        log.debug("Authenticating ratingDTO: {}", ratingDTO);
-        if (ratingRepository.findById(ratingDTO.jokeId()).isEmpty()) {
-            log.debug("Joke with id {} not found", ratingDTO.jokeId());
-            throw new EntityNotFoundException("Joke", ratingDTO.jokeId());
-        }
-        if (ratingDTO.ratingValue() < 1 || ratingDTO.ratingValue() > 5) {
-            log.debug("Rating value {} is invalid", ratingDTO.ratingValue());
-            throw new InvalidValueException(RATING, "value", ratingDTO.ratingValue());
-        }
-        Rating rating = new Rating();
-        rating.setRatingValue(ratingDTO.ratingValue());
-        rating.setJokeId(ratingDTO.jokeId());
-        log.debug("Authenticated rating: {}", rating);
-        return rating;
-    }
-
     public RatingDTO addRating(RatingDTO ratingDTO, String username) {
         log.debug("Adding rating: {} by {}", ratingDTO, username);
         User user = userRepository.findByUsername(username);
-        Rating rating = authRatingDto(ratingDTO);
-        rating.setAuthorId(user.getUserId());
+        Rating rating = ratingRepository.getJokeRating(ratingDTO.jokeId(), user.getUserId());
+        if (rating != null) {
+            return editRating(ratingDTO, rating.getId(), username);
+        }
+        rating = Rating.builder()
+                .ratingValue(ratingDTO.ratingValue())
+                .authorId(user.getUserId())
+                .jokeId(ratingDTO.jokeId())
+                .build();
         ratingRepository.save(rating);
         jokeService.recalculateJokeRating(ratingDTO.jokeId());
         log.debug("Added rating: {} by {}", rating, username);
