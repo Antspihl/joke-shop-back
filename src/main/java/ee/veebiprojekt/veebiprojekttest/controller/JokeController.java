@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -74,5 +75,11 @@ public class JokeController {
     public List<JokeDTO> getBoughtJokes(Principal principal) {
         log.debug("REST request to get bought jokes");
         return jokeService.getBoughtJokes(principal.getName());
+    }
+
+    @GetMapping("/random")
+    public String getRandomJoke() throws IOException {
+        log.debug("REST request to get random joke");
+        return jokeService.getRandomJoke();
     }
 }

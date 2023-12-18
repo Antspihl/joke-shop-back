@@ -12,9 +12,11 @@ import ee.veebiprojekt.veebiprojekttest.repository.JokeRepository;
 import ee.veebiprojekt.veebiprojekttest.repository.RatingRepository;
 import ee.veebiprojekt.veebiprojekttest.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -169,4 +171,11 @@ public class JokeService {
         jokes.forEach(joke -> joke.setPunchline(null));
         return jokeMapper.toDTOList(jokes);
     }
+
+    public String getRandomJoke() throws IOException {
+        log.debug("Request to get random joke");
+        JSONObject response = JSONReader.readJsonFromUrl("https://v2.jokeapi.dev/joke/Programming,Dark,Spooky?type=twopart");
+        return response.get("setup") + " " + response.get("delivery");
+    }
+
 }
