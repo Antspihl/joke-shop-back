@@ -124,8 +124,8 @@ public class UserService {
 
     public void deleteUser(Long userId) {
         log.debug("Deleting user: {}", userId);
-        userRepository.deleteById(userId);
         UserRole userRole = userRoleRepository.getUserRoleByUserId(userId);
         userRoleRepository.delete(userRole);
+        userRepository.deleteById(userId);
     }
 }

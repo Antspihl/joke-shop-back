@@ -61,5 +61,4 @@ public class UserController {
         log.debug("REST request to remove user: {}", id);
         userService.deleteUser(id);
     }
-
 }
