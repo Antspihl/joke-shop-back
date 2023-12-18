@@ -69,7 +69,6 @@ class RatingServiceTests {
     @Test
     void testAddRatingSuccess() {
         when(userRepository.findByUsername(any())).thenReturn(testUser);
-        when(ratingRepository.findById(any())).thenReturn(java.util.Optional.ofNullable(testRating));
 
         ratingService.addRating(testRatingDto, "test");
 

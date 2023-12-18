@@ -185,4 +185,5 @@ class JokeServiceTests {
 
         verify(boughtJokeRepository, times(1)).save(any(BoughtJoke.class));
     }
+
 }

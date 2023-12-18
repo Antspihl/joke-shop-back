@@ -28,6 +28,7 @@ public class JokeService {
     private final RatingRepository ratingRepository;
     private final UserRepository userRepository;
     private final BoughtJokeRepository boughtJokeRepository;
+
     private static final String ENTITY_NAME = "joke";
 
     public JokeService(JokeRepository jokeRepository, JokeMapper jokeMapper, RatingRepository ratingRepository, UserRepository userRepository, BoughtJokeRepository boughtJokeRepository) {
@@ -138,17 +139,10 @@ public class JokeService {
         List<JokeDTO> jokeDTOs = new ArrayList<>();
         for (Joke joke : jokes) {
             Rating rating = ratingRepository.getJokeRating(joke.getId(), userId);
-            double ratingValue;
-            if (rating == null) ratingValue = 0.0;
-            else ratingValue = rating.getRatingValue();
-            jokeDTOs.add(new JokeDTO(
-                    joke.getId(),
-                    joke.getSetup(),
-                    joke.getPunchline(),
-                    joke.getPrice(),
-                    joke.getTimesBought(),
-                    ratingValue,
-                    joke.getCreatedBy()));
+            if (rating == null)
+                jokeDTOs.add(new JokeDTO(joke.getId(), joke.getSetup(), joke.getPunchline(), joke.getPrice(), joke.getTimesBought(), 0.0, joke.getCreatedBy()));
+            else
+                jokeDTOs.add(new JokeDTO(joke.getId(), joke.getSetup(), joke.getPunchline(), joke.getPrice(), joke.getTimesBought(), rating.getRatingValue(), joke.getCreatedBy()));
         }
 
         log.debug("Bought Jokes : {}", jokes);

@@ -20,6 +20,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithMockUser;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -286,4 +287,16 @@ class JokeControllerTests {
         verify(jokeShopExceptionHandler).handleUserException(any(EntityNotFoundException.class));
     }
 
+    @Test
+    void testGetRandomJoke() throws IOException {
+        when(jokeService.getRandomJoke()).thenReturn("TestJoke");
+        when(jokeRepository.findAll()).thenReturn(Collections.singletonList(testJoke));
+        
+        given()
+                .when()
+                .get("/api/jokes/random")
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .body(equalTo("TestJoke"));
+    }
 }

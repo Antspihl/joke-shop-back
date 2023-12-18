@@ -19,9 +19,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static io.restassured.RestAssured.given;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -40,7 +37,6 @@ class UserControllerTests {
 
     private static User testUser;
     private static UserDTO testUserDTO;
-    private static List<UserDTO> testUserDTOList;
     private static String testJwtToken;
     private static RegisterDTO testRegisterDTO;
     private static LoginDTO testLoginDTO;
@@ -55,8 +51,6 @@ class UserControllerTests {
         testJwtToken = "testJwtToken";
         testRegisterDTO = RegisterDTOMock.shallowRegisterDTO();
         testLoginDTO = LoginDTOMock.shallowLoginDTO();
-        testUserDTOList = new ArrayList<>();
-        testUserDTOList.add(testUserDTO);
     }
 
     @Test
@@ -83,20 +77,6 @@ class UserControllerTests {
                 .body(testLoginDTO)
                 .when()
                 .post("/api/auth/login")
-                .then()
-                .statusCode(HttpStatus.OK.value());
-    }
-
-    @Test
-    void testGetUsers() {
-        when(userService.getUsers()).thenReturn(testUserDTOList);
-        when(userRepository.save(any())).thenReturn(testUser);
-
-        given()
-                .contentType("application/json")
-                .body(testUserDTO)
-                .when()
-                .get("/api/users/all")
                 .then()
                 .statusCode(HttpStatus.OK.value());
     }

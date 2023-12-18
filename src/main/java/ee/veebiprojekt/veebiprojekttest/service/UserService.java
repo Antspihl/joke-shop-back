@@ -75,13 +75,6 @@ public class UserService {
         return userMapper.toDTO(user);
     }
 
-    public List<UserDTO> getUsers() {
-        log.debug("Getting all users");
-        List<User> users = userRepository.findAll();
-        users.forEach(user -> user.setPasswordHash(null));
-        return userMapper.toDTOList(users);
-    }
-
     public String login(LoginDTO loginDto) {
         log.debug("Logging in user: {}", loginDto.username());
         String username = loginDto.username();
@@ -121,8 +114,7 @@ public class UserService {
         List<UserDTO> userList = getUsersPaginated(userSearchDTO);
         return UsersPageResponseDto.builder()
                 .pageUsers(userList)
-                .totalUsersCount(userRepository.count())
-                .build();
+                .totalUsersCount(userRepository.count()).build();
     }
 
     public void deleteUser(Long userId) {

@@ -167,4 +167,13 @@ class UserServiceTests {
         verify(userRepository, times(1)).findAll(Mockito.<Specification<User>>any(), any(Pageable.class)
         );
     }
+
+    @Test
+    void testDeleteUserSuccess() {
+        when(userRoleRepository.getUserRoleByUserId(any())).thenReturn(testUserRole);
+
+        userService.deleteUser(testUser.getUserId());
+
+        verify(userRepository, times(1)).deleteById(testUser.getUserId());
+    }
 }

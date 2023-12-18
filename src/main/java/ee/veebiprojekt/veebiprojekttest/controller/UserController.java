@@ -11,7 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -24,12 +23,6 @@ public class UserController {
     public UserDTO getUser(Principal principal) {
         log.debug("REST request to get user: {}", principal.getName());
         return userService.getUserInfo(principal.getName());
-    }
-
-    @GetMapping("/all")
-    public List<UserDTO> getUsers() {
-        log.debug("REST request to get all users");
-        return userService.getUsers();
     }
 
     @GetMapping("/usersTable")

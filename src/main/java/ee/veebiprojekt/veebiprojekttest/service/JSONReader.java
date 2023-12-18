@@ -8,8 +8,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public final class JSONReader {
-    private JSONReader() {
-    }
+    private JSONReader() {}
     private static String readAll(Reader rd) throws IOException {
         StringBuilder sb = new StringBuilder();
         int cp;
