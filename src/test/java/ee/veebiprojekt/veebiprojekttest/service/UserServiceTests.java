@@ -53,6 +53,9 @@ class UserServiceTests {
     @Mock
     private UserRoleRepository userRoleRepository;
 
+    @Mock
+    private RatingService ratingService;
+
     private static User testUser;
     private static UserDTO testUserDTO;
     private static LoginDTO testLoginDTO;
