@@ -22,18 +22,21 @@ import java.util.Map;
 
 @Service
 @Slf4j
+
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RatingService ratingService;
     private final Key jwtSecretKey = Keys.hmacShaKeyFor("Kui on meri hülgehall, ja sind ründamas suur hall".getBytes());
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder, RatingService ratingService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.ratingService = ratingService;
     }
 
     public UserDTO register(RegisterDTO registerDTO) {
@@ -125,6 +128,7 @@ public class UserService {
     public void deleteUser(Long userId) {
         log.debug("Deleting user: {}", userId);
         UserRole userRole = userRoleRepository.getUserRoleByUserId(userId);
+        ratingService.deleteAllRatingFromUser(userId);
         userRoleRepository.delete(userRole);
         userRepository.deleteById(userId);
     }

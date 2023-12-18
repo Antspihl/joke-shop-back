@@ -14,6 +14,7 @@ import ee.veebiprojekt.veebiprojekttest.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -129,11 +130,24 @@ public class JokeService {
 
     public List<JokeDTO> getBoughtJokes(String username) {
         log.debug("Request to get bought Jokes");
-        Long userId = userRepository.findByUsername(username).getUserId();
+        long userId = userRepository.findByUsername(username).getUserId();
         List<Long> boughtJokeIds = boughtJokeRepository.findJokeIdsByUserId(userId);
         List<Joke> jokes = jokeRepository.findAllById(boughtJokeIds);
+        List<JokeDTO> jokeDTOs = new ArrayList<>();
+        for (Joke joke : jokes) {
+            double rating = ratingRepository.getJokeRating(joke.getId(), userId).getRatingValue();
+            jokeDTOs.add(new JokeDTO(
+                    joke.getId(),
+                    joke.getSetup(),
+                    joke.getPunchline(),
+                    joke.getPrice(),
+                    joke.getTimesBought(),
+                    rating,
+                    joke.getCreatedBy()));
+        }
+
         log.debug("Bought Jokes : {}", jokes);
-        return jokeMapper.toDTOList(jokes);
+        return jokeDTOs;
     }
 
     public List<JokeDTO> getSetups() {

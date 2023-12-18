@@ -29,5 +29,5 @@ public class Joke {
     @Column(name = "rating")
     private double rating;
     @Column(name = "created_by")
-    private double createdBy;
+    private long createdBy;
 }

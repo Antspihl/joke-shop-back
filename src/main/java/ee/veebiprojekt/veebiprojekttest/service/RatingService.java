@@ -102,4 +102,11 @@ public class RatingService {
             throw new WrongOwnerException(RATING, rating.getId(), user.getUserId());
         }
     }
+
+    public void deleteAllRatingFromUser(Long userId) {
+        log.debug("Deleting all ratings from user with id {}", userId);
+        List<Rating> ratings = ratingRepository.findAllByAuthorId(userId);
+        ratings.forEach(rating -> ratingRepository.deleteById(rating.getId()));
+        log.debug("Deleted all ratings from user with id {}", userId);
+    }
 }
